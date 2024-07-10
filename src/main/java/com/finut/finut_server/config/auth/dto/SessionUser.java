@@ -1,5 +1,6 @@
 package com.finut.finut_server.config.auth.dto;
 
+
 import com.finut.finut_server.domain.user.Users;
 import lombok.Getter;
 
