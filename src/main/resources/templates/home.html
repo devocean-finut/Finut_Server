@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Home</title>
-    </head>
-    <body>
-    <h1> Home </h1>
-    <p th:if="${#authentication != null}">Welcome, <span th:text="${#authentication.name}">user</span>!</p>
-    <p th:if="${#authentication == null}">Welcome, guest!</p>
-    <a th:if="${#authentication != null}" href="/logout">Logout</a>
-    <a th:if="${#authentication == null}" href="/login">Login</a>
+<head>
+    <title>Home</title>
+</head>
+<body>
+<h1> Home </h1>
+<p th:if="${username != null}">Welcome, <span th:text="${username}">user</span>!</p>
+<p th:if="${username != null}">Your email is: <span th:text="${email}">email@example.com</span></p>
+<a th:if="${username != null}" href="/logout">Logout</a>
+<a th:if="${username == null}" href="/login">Login</a>
+</body>
 </html>
