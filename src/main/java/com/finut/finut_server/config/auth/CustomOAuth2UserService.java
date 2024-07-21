@@ -4,7 +4,7 @@ package com.finut.finut_server.config.auth;
 import com.finut.finut_server.config.auth.dto.OAuthAttributes;
 import com.finut.finut_server.config.auth.dto.SessionUser;
 import com.finut.finut_server.domain.user.Users;
-import com.finut.finut_server.domain.user.UserRepository;
+import com.finut.finut_server.domain.user.UsersRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -20,10 +20,10 @@ import java.util.Collections;
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final UserRepository userRepository;
+    private final UsersRepository userRepository;
     private final HttpSession httpSession;
 
-    public CustomOAuth2UserService(UserRepository userRepository, HttpSession httpSession) {
+    public CustomOAuth2UserService(UsersRepository userRepository, HttpSession httpSession) {
         this.userRepository = userRepository;
         this.httpSession = httpSession;
     }

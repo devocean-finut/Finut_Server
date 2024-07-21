@@ -30,7 +30,7 @@ public class ConsumptionController {
 
     @Operation(summary = "내 물품 보기", description = "구매한 물품들을 모두 위한 api 입니다")
     @GetMapping("/myPurchases")
-    public String readMyPurchases(@RequestParam Long userId) {
+    public String readMyPurchases() {
         return "";
     }
 }
