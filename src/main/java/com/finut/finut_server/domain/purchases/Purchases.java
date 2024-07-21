@@ -2,10 +2,7 @@ package com.finut.finut_server.domain.purchases;
 
 import com.finut.finut_server.domain.product.Product;
 import com.finut.finut_server.domain.user.Users;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
@@ -16,6 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@IdClass(Purchases.PurchasesId.class)
 public class Purchases {
     @Id
     @ManyToOne
