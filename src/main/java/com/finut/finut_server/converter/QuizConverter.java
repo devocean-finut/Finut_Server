@@ -15,7 +15,7 @@ public class QuizConverter {
     }
 
     public static Quiz toQuiz(QuizRequestDTO.saveQuiz request){
-        return Quiz.builder()
+        return com.finut.finut_server.domain.quiz.Quiz.builder()
                 .content(request.getContent())
                 .answer(request.getAnswer())
                 .reason(request.getReason())
@@ -32,6 +32,13 @@ public class QuizConverter {
                 .quizReason(quiz.getReason())
                 .correctMoney(quiz.getCorrectMoney())
                 .wrongMoney(quiz.getWrongMoney())
+                .build();
+    }
+
+    public static QuizResponseDTO.updateMoneyDto toUpdateMoneyDto(Long userId, int moneyAmount){
+        return QuizResponseDTO.updateMoneyDto.builder()
+                .userId(userId)
+                .moneyAmount(moneyAmount)
                 .build();
     }
 }
