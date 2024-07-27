@@ -15,9 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api/quiz")
@@ -25,6 +23,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class QuizController {
     @Autowired
     private QuizService quizService;
+
+    @Operation(summary = "퀴즈 내용 불러오기", description = "퀴즈를 보여줍니다.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "퀴즈 내용을 제대로 가지고 오지 못했습니다.",
+                    content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 에러, 관리자에게 문의 바랍니다.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorReasonDTO.class)))
+    })
+    @GetMapping("/")
+    public ApiResponse<QuizResponseDTO.getQuizDto> getQuiz(@PathVariable(name="userId") Long userId){
+        Quiz quiz = quizService.getQuiz();
+        return ApiResponse.onSuccess(QuizConverter.toGetQuizDto(userId, quiz));
+    }
 
     @Operation(summary = "퀴즈 데이터 저장", description = "생성된 퀴즈 데이터를 DB에 저장합니다.")
     @ApiResponses(value = {
