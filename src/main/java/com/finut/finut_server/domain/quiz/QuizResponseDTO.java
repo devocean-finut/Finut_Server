@@ -33,4 +33,13 @@ public class QuizResponseDTO {
         int correctMoney; // 맞춘 경우 얻는 돈
         int wrongMoney; // 틀린 경우 얻는 돈
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class updateMoneyDto{
+        Long userId; // 접속한 유저의 아이디
+        int moneyAmount; // 적립된 금액
+    }
 }
