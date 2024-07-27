@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
@@ -30,7 +31,7 @@ public class Users extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
 
-    @Column
+    @ColumnDefault("0")
     private Long money;
 
     @Builder
