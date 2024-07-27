@@ -15,10 +15,21 @@ public class InterestRateController {
     @Autowired
     private InterestRateService interestRateService;
 
-    @Operation(summary = "금리 정보", description = "한국은행 Open API를 사용하여 금리 정보를 가져오기 위한 위한 api 입니다")
-    @GetMapping("")
-    public String getInterestRates() {
-        System.out.println(interestRateService.getInterestRates());
-        return interestRateService.getInterestRates();
+    @Operation(summary = "오늘의 금리 정보", description = "오늘의 금리 정보를 가져오기 위한 api 입니다.")
+    @GetMapping("/today")
+    public String getInterestRatesToday() {
+        return interestRateService.getInterestRatesToady();
+    }
+
+    @Operation(summary = "3개년 금리 정보", description = "3년의 금리 정보를 가져오기 위한 api 입니다")
+    @GetMapping("/3")
+    public String getInterestRates3Y() {
+        return interestRateService.getInterestRates3Y();
+    }
+
+    @Operation(summary = "5개년 금리 정보", description = "5년의 금리 정보를 가져오기 위한 api 입니다")
+    @GetMapping("/5")
+    public String getInterestRates5Y() {
+        return interestRateService.getInterestRates5Y();
     }
 }
