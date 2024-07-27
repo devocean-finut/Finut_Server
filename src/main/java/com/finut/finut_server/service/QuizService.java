@@ -38,8 +38,17 @@ public class QuizService {
 
     @Transactional
     public Quiz getQuiz(){
-
         LocalDate today = LocalDate.now();
         return quizRepository.findByDate(today);
+    }
+
+    @Transactional
+    public int updateMoney(QuizRequestDTO.updateMoney request){
+        int moneyAmount = 0;
+        if(request.isCorrect()) moneyAmount = request.getCorrectMoney();
+        else moneyAmount = request.getWrongMoney();
+
+        quizRepository.updateMoney(request.getUserId(), moneyAmount);
+        return moneyAmount;
     }
 }
