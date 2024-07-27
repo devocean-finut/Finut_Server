@@ -23,4 +23,15 @@ public class QuizConverter {
                 .wrongMoney(request.getWrongMoney())
                 .build();
     }
+
+    public static QuizResponseDTO.getQuizDto toGetQuizDto(Long userId, Quiz quiz){
+        return QuizResponseDTO.getQuizDto.builder()
+                .userId(userId)
+                .quizContent(quiz.getContent())
+                .quizAnswer(quiz.getAnswer())
+                .quizReason(quiz.getReason())
+                .correctMoney(quiz.getCorrectMoney())
+                .wrongMoney(quiz.getWrongMoney())
+                .build();
+    }
 }
