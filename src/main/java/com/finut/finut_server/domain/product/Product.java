@@ -15,11 +15,15 @@ public class Product {
     private Long id;
 
     @Column(length = 1000, nullable = false)
-    private String name;
+    private String name; // 상품 이름
 
     @Column(nullable = false)
-    private Long price;
+    private Long price; // 상품 가격
 
     @Column(nullable = false)
-    private Category category;
+    private Category category; // CLOTHES(0), GOODS(1), PLANT(2), ETC(3)
+
+    @Column
+    private String image; //이미지 url
+
 }
