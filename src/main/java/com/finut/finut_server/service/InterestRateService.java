@@ -84,10 +84,7 @@ public class InterestRateService {
                 dataValue = "No data available";
             }
 
-            ObjectNode resultNode = mapper.createObjectNode();
-            resultNode.put("result", dataValue);
-
-            return resultNode.toString();
+            return dataValue;
         } catch (Exception e) {
             e.printStackTrace();
             ObjectNode errorNode = new ObjectMapper().createObjectNode();
@@ -96,7 +93,7 @@ public class InterestRateService {
         }
     }
 
-    public String getInterestRates3Y() {
+    public ArrayNode getInterestRates3Y() {
         startDate = Integer.toString(yearValue - 3) + String.format("%02d", monthValue);
 
         URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl)
@@ -139,10 +136,7 @@ public class InterestRateService {
                 }
             }
 
-            ObjectNode resultNode = objectMapper.createObjectNode();
-            resultNode.set("results", resultArray);
-
-            return objectMapper.writeValueAsString(resultNode);
+            return resultArray;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,7 +144,7 @@ public class InterestRateService {
         }
     }
 
-    public String getInterestRates5Y() {
+    public ArrayNode getInterestRates5Y() {
         startDate = Integer.toString(yearValue - 5) + String.format("%02d", monthValue);
 
         URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl)
@@ -193,10 +187,7 @@ public class InterestRateService {
                 }
             }
 
-            ObjectNode resultNode = objectMapper.createObjectNode();
-            resultNode.set("results", resultArray);
-
-            return objectMapper.writeValueAsString(resultNode);
+            return resultArray;
 
         } catch (Exception e) {
             e.printStackTrace();
