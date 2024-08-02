@@ -33,12 +33,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
 
+        String accessToken = userRequest.getAccessToken().getTokenValue();
+
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
-        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes(), accessToken);
 
-        Users user = saveOrUpdate(attributes);
+        Users user = saveOrUpdate(attributes, accessToken);
 
         httpSession.setAttribute("user", new SessionUser(user));
 
@@ -47,9 +49,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         );
     }
 
-    private Users saveOrUpdate(OAuthAttributes attributes) {
+    private Users saveOrUpdate(OAuthAttributes attributes, String accessToken) {
         Users user = userRepository.findByEmail(attributes.getEmail())
-                .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
+                .map(entity -> entity.update(attributes.getName(), attributes.getPicture(), accessToken))
                 .orElse(attributes.toEntity());
 
         return userRepository.save(user);
