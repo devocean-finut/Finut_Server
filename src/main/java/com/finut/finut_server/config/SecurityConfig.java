@@ -8,6 +8,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -32,16 +35,16 @@ public class SecurityConfig {
                 )
                 .oauth2Login(oauth2Login ->
                         oauth2Login
-                                .loginPage("/login")
+                                .loginPage("/oauth2/authorization/naver")
                                 .userInfoEndpoint(userInfoEndpoint ->
                                         userInfoEndpoint.userService(customOAuth2UserService)
                                 )
-                                .defaultSuccessUrl("/", true)
+                                .defaultSuccessUrl("/success", true)
                 )
                 .formLogin(formLogin ->
                         formLogin
-                                .loginPage("/login")
-                                .defaultSuccessUrl("/", true)
+                                .loginPage("/oauth2/authorization/naver")
+                                .defaultSuccessUrl("/success", true)
                 )
                 .logout(logout ->
                         logout
@@ -61,4 +64,13 @@ public class SecurityConfig {
                 .build();
         return new InMemoryUserDetailsManager(user);
     }
+
+    @Bean
+    public OAuth2AuthorizedClientService authorizedClientService(ClientRegistrationRepository clientRegistrationRepository) {
+        return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
+    }
+
+
+
+
 }
