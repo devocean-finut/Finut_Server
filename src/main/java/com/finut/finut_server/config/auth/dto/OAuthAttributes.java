@@ -24,6 +24,16 @@ public class OAuthAttributes {
         this.picture = picture;
     }
 
+    public Users toEntityWithRefreshToken(String refreshToken) {
+        return Users.builder()
+                .name(name)
+                .email(email)
+                .picture(picture)
+                .refreshToken(refreshToken)
+                .role(Role.USER) // Add Role
+                .build();
+    }
+
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
 
         if("naver".equals(registrationId)) {
