@@ -4,6 +4,7 @@ import com.finut.finut_server.apiPayload.ApiResponse;
 import com.finut.finut_server.config.auth.dto.SessionUser;
 import com.finut.finut_server.domain.user.UserResponseDTO;
 import com.finut.finut_server.service.UsersService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,20 +27,14 @@ public class HomeController {
     public HomeController(HttpSession httpSession) {
         this.httpSession = httpSession;
     }
-//    @Operation(summary = "초기 화면", description = "로그인을 위한 초기 화면을 구성합니다.")
-//    @GetMapping("/")
-//    public ApiResponse<UserResponseDTO.loginUserDTO> home() {
-//        SessionUser user = (SessionUser) httpSession.getAttribute("user");
-//        String accessToken = (String) httpSession.getAttribute("accessToken");
-//        UserResponseDTO.loginUserDTO loginUserDTO = new UserResponseDTO.loginUserDTO(user.getEmail(), accessToken);
-//        return ApiResponse.onSuccess(loginUserDTO);
-//    }
 
     @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
 
     @Autowired
     private UsersService userService;
+
+    @Operation(summary = "로그인 성공", description = "로그인 성공시 해당 api에 리다이렉션 되어 수행됩니다")
     @GetMapping("/success")
     @ResponseBody
     public ApiResponse<UserResponseDTO.loginUserDTO> getTokens(@AuthenticationPrincipal OidcUser oidcUser,
@@ -50,9 +45,6 @@ public class HomeController {
 
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
         String accessToken = authorizedClient.getAccessToken().getTokenValue();
-//        String refreshToken = authorizedClient.getRefreshToken() != null ? authorizedClient.getRefreshToken().getTokenValue() : "No refresh token";
-
-//        userService.saveRefreshToken(user.getEmail(), refreshToken);
 
         UserResponseDTO.loginUserDTO loginUserDTO = new UserResponseDTO.loginUserDTO(user.getEmail(), accessToken);
         return ApiResponse.onSuccess(loginUserDTO);

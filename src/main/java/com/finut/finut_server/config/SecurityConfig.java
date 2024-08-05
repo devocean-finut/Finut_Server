@@ -31,7 +31,6 @@ public class SecurityConfig {
                 )
                 .oauth2Login(oauth2Login ->
                         oauth2Login
-                                .loginPage("/oauth2/authorization/naver")
                                 .userInfoEndpoint(userInfoEndpoint ->
                                         userInfoEndpoint.userService(customOAuth2UserService)
                                 )
@@ -39,12 +38,11 @@ public class SecurityConfig {
                 )
                 .formLogin(formLogin ->
                         formLogin
-                                .loginPage("/oauth2/authorization/naver")
                                 .defaultSuccessUrl("/success", true)
                 )
                 .logout(logout ->
                         logout
-                                .logoutSuccessUrl("/login")
+                                .logoutSuccessUrl("/") // 임시
                 )
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
