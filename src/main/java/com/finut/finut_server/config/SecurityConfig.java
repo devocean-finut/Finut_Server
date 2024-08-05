@@ -3,6 +3,8 @@ package com.finut.finut_server.config;
 
 import com.finut.finut_server.apiPayload.exception.handler.CustomOAuth2AuthenticationSuccessHandler;
 import com.finut.finut_server.config.auth.CustomOAuth2UserService;
+import com.finut.finut_server.domain.user.UsersRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,17 +19,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler;
-
-    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, CustomOAuth2AuthenticationSuccessHandler customOAuth2AuthenticationSuccessHandler) {
-        this.customOAuth2UserService = customOAuth2UserService;
-        this.customOAuth2AuthenticationSuccessHandler = customOAuth2AuthenticationSuccessHandler;
-    }
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
@@ -48,10 +41,6 @@ public class SecurityConfig {
                         formLogin
                                 .loginPage("/oauth2/authorization/naver")
                                 .defaultSuccessUrl("/success", true)
-                )
-                .oauth2Login(oauth2Login ->
-                        oauth2Login
-                                .successHandler(customOAuth2AuthenticationSuccessHandler)
                 )
                 .logout(logout ->
                         logout
@@ -77,6 +66,12 @@ public class SecurityConfig {
         return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
     }
 
+    @Bean
+    public CustomOAuth2UserService customOAuth2UserService(UsersRepository userRepository, HttpSession httpSession, OAuth2AuthorizedClientService authorizedClientService) {
+        CustomOAuth2UserService customOAuth2UserService = new CustomOAuth2UserService(userRepository, httpSession);
+        customOAuth2UserService.setAuthorizedClientService(authorizedClientService);
+        return customOAuth2UserService;
+    }
 
 
 

@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
@@ -25,7 +24,7 @@ public class Users extends BaseTimeEntity {
     private String email;
 
     @Column(nullable = false)
-    private String accessToken;
+    private String refreshToken;
 
     @Column
     private String picture;
@@ -38,19 +37,24 @@ public class Users extends BaseTimeEntity {
     private Long money = 100000L;
 
     @Builder
-    public Users(String name, String email, String picture, String accessToken, Role role) {
+    public Users(String name, String email, String picture, String refreshToken, Role role) {
         this.name = name;
         this.email = email;
         this.picture = picture;
-        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
         this.role = role;
     }
 
-    public Users update(String name, String picture, String accessToken) {
+    public Users update(String name, String picture, String refreshToken) {
         this.name = name;
         this.picture = picture;
-        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+        return this;
+    }
 
+    public Users setRefreshToken(String refreshToken)
+    {
+        this.refreshToken = refreshToken;
         return this;
     }
 
