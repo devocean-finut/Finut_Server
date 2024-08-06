@@ -19,10 +19,11 @@ public class Quiz extends BaseTimeEntity {
     @Column(nullable = false)
     private String content; // 퀴즈 내용
 
+    @Lob
     @Column(nullable = false)
     private String answer; // 퀴즈 정답
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "MEDIUMTEXT")
     private String reason; // 정답 이유
 
     @Column(nullable = false)
