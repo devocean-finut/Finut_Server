@@ -27,11 +27,7 @@ public class QuizResponseDTO {
     @AllArgsConstructor
     public static class getQuizDto{
         Long userId; // 접속한 유저의 아이디
-        String quizContent; // 퀴즈 내용
-        String quizAnswer; // 퀴즈 답
-        String quizReason; // 답 풀이
-        int correctMoney; // 맞춘 경우 얻는 돈
-        int wrongMoney; // 틀린 경우 얻는 돈
+        Quiz quiz;
     }
 
     @Builder
