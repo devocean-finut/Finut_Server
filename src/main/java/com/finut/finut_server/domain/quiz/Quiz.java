@@ -17,14 +17,26 @@ public class Quiz extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String content; // 퀴즈 내용
+    private String question; // 퀴즈 내용
 
     @Lob
+    private String option1;
+
+    @Lob
+    private String option2;
+
+    @Lob
+    private String option3;
+
     @Column(nullable = false)
-    private String answer; // 퀴즈 정답
+    @Lob
+    private String answer;
 
     @Column(nullable = false, columnDefinition = "MEDIUMTEXT")
-    private String reason; // 정답 이유
+    private String description; // 정답 설명
+
+    @Column(nullable = false)
+    private String quizType; // 퀴즈 타입: TF or 객관식
 
     @Column(nullable = false)
     private int correctMoney; // 맞춘 경우 얻는 돈
