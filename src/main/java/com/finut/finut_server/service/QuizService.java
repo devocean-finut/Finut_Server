@@ -25,18 +25,6 @@ public class QuizService {
     private QuizRepository quizRepository;
 
     @Transactional
-    public Quiz saveQuiz(QuizRequestDTO.saveQuiz request){
-        if(request.getCorrectMoney() < 0 || request.getWrongMoney() < 0){
-            throw new GeneralException(ErrorStatus.INVALID_NUMBER);
-        }
-
-        Quiz quiz = QuizConverter.toQuiz(request);
-        quiz = quizRepository.save(quiz);
-
-        return quiz;
-    }
-
-    @Transactional
     public Quiz getQuiz(){
         LocalDate today = LocalDate.now();
         return quizRepository.findByDate(today);
