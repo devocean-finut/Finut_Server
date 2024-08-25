@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -26,8 +27,20 @@ public class QuizService {
 
     @Transactional
     public Quiz getQuiz(){
-        LocalDate today = LocalDate.now();
-        return quizRepository.findByDate(today);
+        // displayed == 0 이면 조회 가능
+        Quiz quiz;
+        while(true){
+            Random random = new Random();
+            Long randomNumber = random.nextLong(260) + 1; // 1부터 260까지의 숫자를 랜덤하게 뽑음
+            quiz = quizRepository.findById(randomNumber)
+                    .orElseThrow(() -> new GeneralException(ErrorStatus.INVALID_NUMBER));
+            if(quiz.getDisplayed() == 0) {
+                quiz.setDisplayed(1);
+                quiz = quizRepository.save(quiz);
+                break;
+            }
+        }
+        return quiz;
     }
 
     @Transactional
