@@ -23,7 +23,7 @@ public class QuizController {
     @Autowired
     private QuizService quizService;
 
-    @Operation(summary = "퀴즈 내용 불러오기", description = "퀴즈를 보여줍니다.")
+    @Operation(summary = "랜덤으로 퀴즈 내용 불러오기", description = "퀴즈를 보여줍니다.")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = QuizResponseDTO.getQuizDto.class))),
