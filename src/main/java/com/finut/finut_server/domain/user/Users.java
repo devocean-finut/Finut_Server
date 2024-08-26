@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -35,6 +38,9 @@ public class Users extends BaseTimeEntity {
 
     @Column(nullable = false)
     private Long money = 100000L;
+
+    @Column(nullable = false)
+    private String attend = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
     @Builder
     public Users(String name, String email, String picture, String refreshToken, Role role) {
