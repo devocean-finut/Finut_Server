@@ -14,4 +14,13 @@ public class UserResponseDTO {
         String email;
         String accessToken;
     }
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class updateAttendance {
+        Long userId;
+        String message;
+        Boolean isAttend;
+    }
 }

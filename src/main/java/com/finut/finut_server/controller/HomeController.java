@@ -3,6 +3,9 @@ package com.finut.finut_server.controller;
 import com.finut.finut_server.apiPayload.ApiResponse;
 import com.finut.finut_server.apiPayload.code.ErrorReasonDTO;
 import com.finut.finut_server.config.auth.dto.SessionUser;
+import com.finut.finut_server.converter.QuizConverter;
+import com.finut.finut_server.domain.quiz.Quiz;
+import com.finut.finut_server.domain.quiz.QuizResponseDTO;
 import com.finut.finut_server.domain.user.UserResponseDTO;
 import com.finut.finut_server.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +21,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2AuthorizedClient;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.springframework.web.bind.annotation.RestController;
