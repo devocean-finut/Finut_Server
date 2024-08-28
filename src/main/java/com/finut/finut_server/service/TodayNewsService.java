@@ -19,9 +19,23 @@ import java.util.stream.Collectors;
 @Service
 public class TodayNewsService {
     private static final String economy_URL = "https://www.mk.co.kr/rss/30100041/";
+    private static final String real_estate_URL = "https://www.mk.co.kr/rss/50300009/";
+    private static final String stock_URL = "https://www.mk.co.kr/rss/50200011/";
 
-    public List<NewsItemDTO> economyFeed() throws Exception {
-        URL feedSource = new URL(economy_URL);
+    public List<NewsItemDTO> getNews(int type) throws Exception {
+        URL feedSource;
+        if (type == 1)
+        {
+            feedSource = new URL(economy_URL);
+        }
+        else if (type == 2)
+        {
+            feedSource = new URL(real_estate_URL);
+        }
+        else {
+            feedSource = new URL(stock_URL);
+        }
+
         SyndFeedInput input = new SyndFeedInput();
         SyndFeed feed = input.build(new XmlReader(feedSource));
 
