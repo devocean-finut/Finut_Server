@@ -25,7 +25,7 @@ public class TodayNewsService {
         SyndFeedInput input = new SyndFeedInput();
         SyndFeed feed = input.build(new XmlReader(feedSource));
 
-        return feed.getEntries().stream().map(this::convertToNewsItem).collect(Collectors.toList());
+        return feed.getEntries().stream().map(this::convertToNewsItem).limit(10).collect(Collectors.toList());
     }
 
     private NewsItemDTO convertToNewsItem(SyndEntry entry) {
