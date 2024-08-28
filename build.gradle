@@ -38,6 +38,9 @@ dependencies {
 
     // mysql 설정
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    //RSS 툴
+    implementation 'com.rometools:rome:1.15.0'
 }
 
 tasks.named('test') {
