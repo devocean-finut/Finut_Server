@@ -83,12 +83,18 @@ public class TodayNewsService {
         try {
             Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0").get();
 
-            Elements refIdElements = doc.select("p[refid]");
+            // 본문을 감싸고 있는 요소 선택 (div.news_cnt_detail_wrap)
+            org.jsoup.nodes.Element content = doc.selectFirst("div.news_cnt_detail_wrap[itemprop=articleBody]");
 
-            if (refIdElements != null) {
-                return refIdElements.toString();
+            if (content != null) {
+                // 이미지, 광고, 비어있는 태그 등을 제거
+                content.select("img, iframe, figure, figcaption, .ad_boxm1, .thumb_area, .mid_title").remove();
+
+                // 텍스트만 추출
+                String text = content.text();
+                return text.toString();
             } else {
-                return "본문을 찾을 수 없습니다.";
+                return("본문을 찾을 수 없습니다.");
             }
 
         } catch (IOException e) {
