@@ -4,10 +4,15 @@ import com.finut.finut_server.domain.news.NewsItemDTO;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.XmlReader;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import com.rometools.rome.io.SyndFeedInput;
 
 import org.jdom2.Element;
+
+import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -73,4 +78,22 @@ public class TodayNewsService {
         return news;
     }
 
+
+    public static String getMainContent(String url) {
+        try {
+            Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0").get();
+
+            Elements refIdElements = doc.select("p[refid]");
+
+            if (refIdElements != null) {
+                return refIdElements.toString();
+            } else {
+                return "본문을 찾을 수 없습니다.";
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "본문을 가져오는 도중 오류가 발생했습니다.";
+        }
+    }
 }

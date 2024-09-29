@@ -82,5 +82,10 @@ public class TodayNewsController {
             throw new RuntimeException("Fail to fetch RSS Economy", e);
         }
     }
+    @GetMapping("/get-content")
+    public String getContent() {
+        String url = "https://www.mk.co.kr/news/economy/11127965";
+        return TodayNewsService.getMainContent(url);
+    }
 
 }
