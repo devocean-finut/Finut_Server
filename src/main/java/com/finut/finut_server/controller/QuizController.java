@@ -4,8 +4,6 @@ import com.finut.finut_server.apiPayload.ApiResponse;
 import com.finut.finut_server.apiPayload.code.ErrorReasonDTO;
 import com.finut.finut_server.converter.QuizConverter;
 import com.finut.finut_server.domain.quiz.Quiz;
-import com.finut.finut_server.domain.quiz.QuizRequestDTO;
-import com.finut.finut_server.domain.quiz.QuizResponseDTO;
 import com.finut.finut_server.service.QuizService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

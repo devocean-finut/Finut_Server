@@ -1,9 +1,6 @@
 package com.finut.finut_server.converter;
 
 import com.finut.finut_server.domain.quiz.Quiz;
-import com.finut.finut_server.domain.quiz.QuizRequestDTO;
-import com.finut.finut_server.domain.quiz.QuizResponseDTO;
-import org.springframework.security.core.parameters.P;
 
 public class QuizConverter {
 
