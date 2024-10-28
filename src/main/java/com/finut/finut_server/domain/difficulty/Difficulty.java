@@ -13,7 +13,6 @@ public class Difficulty {
     @Enumerated(EnumType.STRING)
     private DifficultyType difficulty;
 
-    @Column
+    @Column(nullable = false)
     private int diffQuizCnt;
-
 }

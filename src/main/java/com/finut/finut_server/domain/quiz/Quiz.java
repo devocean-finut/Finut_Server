@@ -20,16 +20,6 @@ public class Quiz extends BaseTimeEntity {
     @Column(nullable = false)
     private String question; // 퀴즈 내용
 
-    @Lob
-    @Column(nullable = false)
-    private String option1;
-
-    @Lob
-    private String option2;
-
-    @Lob
-    private String option3;
-
     @Column(nullable = false)
     @Lob
     private String answer;
