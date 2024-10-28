@@ -2,6 +2,8 @@ package com.finut.finut_server.domain.user;
 
 
 import com.finut.finut_server.domain.BaseTimeEntity;
+import com.finut.finut_server.domain.difficulty.Difficulty;
+import com.finut.finut_server.domain.quizDone.QuizDone;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +12,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -41,6 +44,16 @@ public class Users extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String attend = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+
+
+    @OneToOne
+    @JoinColumn(name = "difficulty")
+    private Difficulty difficulty;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<QuizDone> quizDoneList;
+
 
     @Builder
     public Users(String name, String email, String picture, String refreshToken, Role role) {

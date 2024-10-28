@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
 
-    @Query("SELECT e FROM Quiz e WHERE DATE(e.createdDate) = :date")
-    Quiz findByDate(@Param("date") LocalDate date);
+//    @Query("SELECT e FROM Quiz e WHERE DATE(e.createdDate) = :date")
+//    Quiz findByDate(@Param("date") LocalDate date);
 
-    @Modifying
-    @Transactional
-    @Query("UPDATE Users u SET u.money = u.money + :moneyAmount WHERE u.id = :userId")
-    void updateMoney(Long userId, int moneyAmount);
+//    @Modifying
+//    @Transactional
+//    @Query("UPDATE Users u SET u.money = u.money + :moneyAmount WHERE u.id = :userId")
+//    void updateMoney(Long userId, int moneyAmount);
 }
