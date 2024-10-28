@@ -20,7 +20,7 @@ public class UserController {
     @Autowired
     private UsersService usersService;
 
-    @Operation(summary = "출석 체크 하기", description = "출석 체크 시, 돈을 지급하는 API 입니다.")
+    @Operation(summary = "월급 받기", description = "출석체크 수가 5의 배수면 월급을 받는 API 입니다.")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = UserResponseDTO.updateAttendance.class))),

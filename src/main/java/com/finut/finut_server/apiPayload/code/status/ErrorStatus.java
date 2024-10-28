@@ -25,7 +25,10 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 퀴즈 관련 에러
     INVALID_NUMBER(HttpStatus.BAD_REQUEST, "QUIZ400", "유효하지 않은 값입니다."),
-    NULL_DATA(HttpStatus.BAD_REQUEST, "QUIZ401", "데이터가 없습니다.");
+    NULL_DATA(HttpStatus.BAD_REQUEST, "QUIZ401", "데이터가 없습니다."),
+
+    // 출석 관련 에러
+    NO_DATA_FOUND(HttpStatus.BAD_REQUEST, "ATTEND400", "데이터가 없습니다");
 
     private final HttpStatus httpStatus;
     private final String code;
