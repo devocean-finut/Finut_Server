@@ -11,7 +11,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/news")
@@ -91,9 +93,14 @@ public class TodayNewsController {
                             schema = @Schema(implementation = ErrorReasonDTO.class)))
     })
     @GetMapping("/stock/{number}")
-    public String getStockContent(@PathVariable Long number) {
+    public Map<String, String> getStockContent(@PathVariable Long number) {
         String url = "https://m.mk.co.kr/news/stock/" + number;
-        return TodayNewsService.getMainContent(url);
+        String content = TodayNewsService.getMainContent(url);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("content", content);
+
+        return response;
     }
 
     @Operation(summary = "뉴스 본문 - 경제", description = "{number} 경제 뉴스의 본문을 보여줍니다")
@@ -107,9 +114,14 @@ public class TodayNewsController {
                             schema = @Schema(implementation = ErrorReasonDTO.class)))
     })
     @GetMapping("/economy/{number}")
-    public String getEconomyContent(@PathVariable Long number) {
+    public Map<String, String> getEconomyContent(@PathVariable Long number) {
         String url = "https://m.mk.co.kr/news/economy/" + number;
-        return TodayNewsService.getMainContent(url);
+        String content = TodayNewsService.getMainContent(url);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("content", content);
+
+        return response;
     }
 
     @Operation(summary = "뉴스 본문 - 부동산", description = "{number} 부동산 뉴스의 본문을 보여줍니다")
@@ -123,9 +135,14 @@ public class TodayNewsController {
                             schema = @Schema(implementation = ErrorReasonDTO.class)))
     })
     @GetMapping("/realestate/{number}")
-    public String getContent(@PathVariable Long number) {
+    public Map<String, String> getContent(@PathVariable Long number) {
         String url = "https://m.mk.co.kr/news/realestate/" + number;
-        return TodayNewsService.getMainContent(url);
+        String content = TodayNewsService.getMainContent(url);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("content", content);
+
+        return response;
     }
 
 }
