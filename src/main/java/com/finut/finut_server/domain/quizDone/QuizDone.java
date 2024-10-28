@@ -23,6 +23,6 @@ public class QuizDone {
     @JoinColumn(name = "user_id", nullable = false)
     private Users userId;
 
-    @Column
-    private Boolean isCorrect;
+    @Column(nullable = false)
+    private Boolean isCorrect = false;
 }

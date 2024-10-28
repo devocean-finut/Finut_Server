@@ -36,13 +36,4 @@ public class QuizService {
 //        return quiz;
 //    }
 
-//    @Transactional
-//    public int updateMoney(QuizRequestDTO.updateMoney request){
-//        int moneyAmount = 0;
-//        if(request.isCorrect()) moneyAmount = request.getCorrectMoney();
-//        else moneyAmount = request.getWrongMoney();
-//
-//        quizRepository.updateMoney(request.getUserId(), moneyAmount);
-//        return moneyAmount;
-//    }
 }
