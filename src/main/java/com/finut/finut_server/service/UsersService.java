@@ -61,8 +61,9 @@ public class UsersService {
             attend.setUser(user);
             attend.setAttendDate(formattedDate);
             attendRepository.save(attend);
-
+            user.setTodaySalary(false);
             user.setAttendCount(user.getAttendCount() + 1);
+            usersRepository.save(user);
 
 //            // 만약 연속 출석인 경우, XP 올리기
 //            if(hasFiveConsecutiveDays(userId)){
@@ -84,15 +85,17 @@ public class UsersService {
                 // attendCount가 5가 되었다면
                 user.setTodaySalary(true);
                 user.setAttendCount(0);
+                usersRepository.save(user);
+
                 Level level = levelRepository.findById(user.getLevel().getId());
                 user.setMoney(user.getMoney() + level.getSalary());
                 msg = "월급을 받았습니다!";
             }
             else {
                 user.setAttendCount(user.getAttendCount() + 1);
+                usersRepository.save(user);
             }
         }
-        usersRepository.save(user);
 
         UserResponseDTO.updateAttendance updateAttendance = UserResponseDTO.updateAttendance.builder()
                 .userId(userId)
