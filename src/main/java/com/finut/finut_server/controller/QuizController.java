@@ -10,9 +10,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpResponse;
 import java.util.Optional;
 
 @RestController
@@ -38,7 +40,16 @@ public class QuizController {
         Optional<Quiz> quiz = quizService.getQuiz(userId);
         if(quiz.isPresent())
             return ApiResponse.onSuccess(quiz);
-        return null;
+        return ApiResponse.onFailure("400", "퀴즈 내용을 제대로 가져오지 못했습니다", quiz);
     }
+
+
+    // 퀴즈 맞췄을 때 api/ db 생성(isCorrect = true), diffQuizCnt++, levelQuizCnt++
+    public ApiResponse<String> quizCorrect() {
+
+
+        return ApiResponse.onSuccess("success");
+    }
+    // 퀴즈 틀렸을 때 api/ db 생성(isCorrect = false)
 
 }

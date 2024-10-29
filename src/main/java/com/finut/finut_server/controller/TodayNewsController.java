@@ -24,7 +24,7 @@ public class TodayNewsController {
     @Operation(summary = "오늘의 뉴스 - 경제", description = "오늘의 뉴스 중 경제 부분의 뉴스들을 보여줍니다")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = QuizResponseDTO.getQuizDto.class))),
+                    schema = @Schema(implementation = String.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "뉴스 내용을 제대로 가지고 오지 못했습니다.",
                     content = @Content),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 에러, 관리자에게 문의 바랍니다.",
@@ -44,7 +44,7 @@ public class TodayNewsController {
     @Operation(summary = "오늘의 뉴스 - 부동산", description = "오늘의 뉴스 중 부동산 부분의 뉴스들을 보여줍니다")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = QuizResponseDTO.getQuizDto.class))),
+                    schema = @Schema(implementation = String.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "뉴스 내용을 제대로 가지고 오지 못했습니다.",
                     content = @Content),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 에러, 관리자에게 문의 바랍니다.",
@@ -64,7 +64,7 @@ public class TodayNewsController {
     @Operation(summary = "오늘의 뉴스 - 증권", description = "오늘의 뉴스 중 증권 부분의 뉴스들을 보여줍니다")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = QuizResponseDTO.getQuizDto.class))),
+                    schema = @Schema(implementation = String.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "뉴스 내용을 제대로 가지고 오지 못했습니다.",
                     content = @Content),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 에러, 관리자에게 문의 바랍니다.",
