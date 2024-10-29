@@ -21,6 +21,5 @@ public class UserResponseDTO {
     public static class updateAttendance {
         Long userId;
         String message;
-        Boolean isAttend;
     }
 }

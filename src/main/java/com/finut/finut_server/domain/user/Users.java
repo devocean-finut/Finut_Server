@@ -2,17 +2,17 @@ package com.finut.finut_server.domain.user;
 
 
 import com.finut.finut_server.domain.BaseTimeEntity;
+import com.finut.finut_server.domain.level.Level;
+import com.finut.finut_server.domain.level.LevelName;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Users extends BaseTimeEntity {
@@ -39,8 +39,24 @@ public class Users extends BaseTimeEntity {
     @Column(nullable = false)
     private Long money = 100000L;
 
+    @OneToOne
+    @JoinColumn(name = "levelId", referencedColumnName = "id")
+    private Level level;
+
     @Column(nullable = false)
-    private String attend = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    private int attendCount = 0;
+
+    @Column(nullable = false)
+    private int XP = 0;
+
+    @Column(nullable = false)
+    private boolean todaySalary = false;
+
+    @Column(nullable = false)
+    private int diffQuizCount = 0;
+
+    @Column(nullable = false)
+    private int levelQuizCount = 0;
 
     @Builder
     public Users(String name, String email, String picture, String refreshToken, Role role) {
@@ -66,5 +82,13 @@ public class Users extends BaseTimeEntity {
 
     public String getRoleKey() {
         return this.role.getKey();
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.level == null) {
+            this.level = new Level(); // 또는 LevelRepository를 사용해 ID가 1인 Level을 설정
+            this.level.setId(1L); // 기본값으로 ID가 1인 Level 설정
+        }
     }
 }
