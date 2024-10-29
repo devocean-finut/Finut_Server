@@ -6,15 +6,26 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Entity
 @Getter
 @Setter
 public class QuizDone {
-
     @EmbeddedId
     private QuizDoneId id;
 
-    @Column(nullable = false)
+    @ManyToOne
+    @MapsId("quizId")
+    @JoinColumn(name = "quizId", insertable = false, updatable = false)
+    private Quiz quiz;
+
+    @ManyToOne
+    @MapsId("userId")
+    @JoinColumn(name = "userId", insertable = false, updatable = false)
+    private Users user;
+
     private Boolean isCorrect = false;
 
 }
+

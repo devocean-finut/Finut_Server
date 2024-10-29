@@ -2,13 +2,10 @@ package com.finut.finut_server.domain.user;
 
 
 import com.finut.finut_server.domain.BaseTimeEntity;
-<<<<<<< HEAD
 import com.finut.finut_server.domain.difficulty.Difficulty;
 import com.finut.finut_server.domain.quizDone.QuizDone;
-=======
 import com.finut.finut_server.domain.level.Level;
 import com.finut.finut_server.domain.level.LevelName;
->>>>>>> 5e5ef4c89f366717ff36179641ce7050c3b669a5
 import jakarta.persistence.*;
 import lombok.*;
 

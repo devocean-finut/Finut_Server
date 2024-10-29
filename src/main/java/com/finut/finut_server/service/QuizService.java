@@ -49,7 +49,7 @@ public class QuizService {
 
         // 해당 사용자가 완료한 퀴즈 ID 목록 가져오기
         Set<Long> completedQuizIds = quizDoneRepository.findByIdUserId(userId).stream()
-                .map(quizDone -> quizDone.getId().getQuiz().getId())
+                .map(quizDone -> quizDone.getQuiz().getId())
                 .collect(Collectors.toSet());
 
         // 완료한 퀴즈는 제외한 남은 퀴즈 목록 생성

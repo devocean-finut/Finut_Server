@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface QuizDoneRepository extends JpaRepository<QuizDone, QuizDoneId> {
-    boolean existsByIdQuizAndIdUser(Quiz id_quiz, Users id_user);
+    boolean existsByIdQuizIdAndIdUserId(Long quizId, Long userId);
 
     Optional<QuizDone> findByIdUserId(Long userId);
 }
