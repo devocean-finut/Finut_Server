@@ -1,10 +1,8 @@
 package com.finut.finut_server.service;
 
-import com.finut.finut_server.domain.difficulty.Difficulty;
 import com.finut.finut_server.domain.difficulty.DifficultyType;
 import com.finut.finut_server.domain.quiz.Quiz;
 import com.finut.finut_server.domain.quiz.QuizRepository;
-import com.finut.finut_server.domain.quiz.QuizResponseDTO;
 import com.finut.finut_server.domain.quizDone.QuizDoneRepository;
 import com.finut.finut_server.domain.user.Users;
 import com.finut.finut_server.domain.user.UsersRepository;
@@ -64,5 +62,11 @@ public class QuizService {
 
         // 남은 퀴즈 목록에서 랜덤하게 하나 선택하여 반환
         return Optional.of(uncompletedQuizzes.get(random.nextInt(uncompletedQuizzes.size())));
+    }
+
+
+    public Optional<Quiz> getQuizByQuizId(Long quizId) {
+        return quizRepository.findById(quizId);
+
     }
 }

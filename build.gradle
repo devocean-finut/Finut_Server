@@ -37,6 +37,15 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // Google Auth Library for OAuth 2.0
+    implementation 'com.google.auth:google-auth-library-oauth2-http:1.8.0'
+
+    // Google API Client Library for OAuth2
+    implementation 'com.google.apis:google-api-services-oauth2:v2-rev151-1.25.0'
+
+    // JSON Parsing (Gson)
+    implementation 'com.google.http-client:google-http-client-gson:1.41.6'
+
     // mysql 설정
     runtimeOnly 'com.mysql:mysql-connector-j'
 

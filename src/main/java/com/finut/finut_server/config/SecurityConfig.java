@@ -4,6 +4,7 @@ package com.finut.finut_server.config;
 import com.finut.finut_server.apiPayload.exception.handler.CustomOAuth2AuthenticationSuccessHandler;
 import com.finut.finut_server.config.auth.CustomOAuth2UserService;
 import com.finut.finut_server.domain.user.UsersRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
