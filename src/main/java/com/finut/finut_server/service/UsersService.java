@@ -10,15 +10,13 @@ import com.finut.finut_server.domain.user.UserResponseDTO;
 import com.finut.finut_server.domain.user.Users;
 import com.finut.finut_server.domain.user.UsersRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -131,6 +129,20 @@ public class UsersService {
             }
         }
         return true;
+    }
+
+    public Users getUserIdByEmail(String email) {
+        return usersRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+    }
+
+    public void updateDiffLevelCnt(Long userId) {
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        user.setDiffQuizCount(user.getDiffQuizCount() + 1); // diffQuizCnt 증가
+        user.setLevelQuizCount(user.getLevelQuizCount() + 1); // levelQuizCnt 증가
+        usersRepository.save(user); // 변경사항 저장
     }
 }
 
