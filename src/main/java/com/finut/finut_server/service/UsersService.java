@@ -158,11 +158,8 @@ public class UsersService {
         Optional<Quiz> quiz;
 
         if (header != null && header.startsWith("Bearer "))
-//        if(true)
         {
             String accessToken = header.substring(7); // "Bearer " 제거
-//            String accessToken = "ya29.a0AeDClZCXQpR9Pb1ZRQSh5SrNYPTqX3NRJRAJRxxRif17PYzuEJuiFfeuVVM0VBee9S2FAPLKrieDazlPK7jL69LtIw2YGPU2yOqhQVvUMGEXJ2e6K9Tedpsc7A84ut1azP7IlpmjzmW1aAGYfoloJ3MFFBuF-2XZCgnEIx4FaCgYKAQgSARMSFQHGX2Mip5IYMEzhkNcsRTikuilkKQ0175";
-
             try {
                 // Access Token을 이용해 사용자 정보를 조회합니다.
                 Userinfoplus userInfo = googleAuthService.getUserInfo(accessToken);
