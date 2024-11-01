@@ -49,7 +49,7 @@ public class QuizController {
         this.quizDoneService = quizDoneService;
     }
 
-    @Operation(summary = "랜덤으로 퀴즈 내용 불러오기", description = "퀴즈를 보여줍니다.")
+    @Operation(summary = "랜덤으로 퀴즈 내용 불러오기", description = "유저가 풀지 않았던 문제 중에서 퀴즈를 랜덤으로 하나 가져옵니다.")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = QuizResponseDTO.randomQuizResponseDTO.class))),
@@ -60,8 +60,9 @@ public class QuizController {
                             schema = @Schema(implementation = ErrorReasonDTO.class)))
     })
     @GetMapping("")
-    public ApiResponse<Optional<Quiz>> getQuiz(@RequestParam(name="userId") Long userId){
-        Optional<Quiz> quiz = quizService.getQuiz(userId);
+    public ApiResponse<Optional<Quiz>> getQuiz(HttpServletRequest request, HttpServletResponse response){
+        Users user = usersService.getUserIdByToken(request, response);
+        Optional<Quiz> quiz = quizService.getQuiz(user.getId());
         if(quiz.isPresent())
             return ApiResponse.onSuccess(quiz);
         return ApiResponse.onFailure("400", "퀴즈 내용을 제대로 가져오지 못했습니다", quiz);
@@ -69,92 +70,56 @@ public class QuizController {
 
 
 
+    @Operation(summary = "퀴즈를 맞췄을 때", description = "퀴즈를 맞췄을 때 QuizDone DB에 해당 내용을 저장하고, 난이도 상승에 필요한 퀴즈 개수와 레벨업에 필요한 퀴즈 개수를 증가시킵니다.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = QuizResponseDTO.randomQuizResponseDTO.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "퀴즈 내용을 제대로 가지고 오지 못했습니다.",
+                    content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 에러, 관리자에게 문의 바랍니다.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorReasonDTO.class)))
+    })
     // 퀴즈 맞췄을 때 api/ db 생성(isCorrect = true), diffQuizCnt++, levelQuizCnt++
     @GetMapping("/correct/{quizId}")
-    public ApiResponse<String> quizCorrect(@PathVariable Long quizId, HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        // Authorization 헤더에서 Access Token을 가져옵니다.
-        String header = request.getHeader("Authorization");
-        Users user;
-        Optional<Quiz> quiz;
+    public ApiResponse<String> quizCorrect(@PathVariable Long quizId, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        Users user = usersService.getUserIdByToken(request, response);
+        Optional<Quiz> quiz = quizService.getQuizByQuizId(quizId);
 
-        if (header != null && header.startsWith("Bearer "))
-//        if(true)
-        {
-            String accessToken = header.substring(7); // "Bearer " 제거
-//            String accessToken;
-
-            try {
-                // Access Token을 이용해 사용자 정보를 조회합니다.
-                Userinfoplus userInfo = googleAuthService.getUserInfo(accessToken);
-//                System.out.println("User ID: " + userInfo.getId());
-//                System.out.println("User Email: " + userInfo.getEmail());
-                // 필요한 경우 userInfo 객체를 SecurityContext에 저장해 인증 정보를 유지할 수 있습니다.
-
-//                System.out.println("User: " + usersService.getUserIdByEmail(userInfo.getEmail()).getId());
-//                userId = usersService.getUserIdByEmail(userInfo.getEmail()).getId();
-                user = usersService.getUserIdByEmail(userInfo.getEmail());
-                quiz = quizService.getQuizByQuizId(quizId);
-
-                if (quiz.isPresent()) {
-                    quizDoneService.saveQuizDone(user, quiz, true); //db 생성(isCorrect = true)
-                    usersService.updateDiffLevelCnt(user.getId()); //diffQuizCnt++, levelQuizCnt++
-                    // 성공 응답 반환
-                    return ApiResponse.onSuccess("success");
-                }
-                else
-                    return ApiResponse.onFailure("500", "No Quiz", "data");
-
-
-            } catch (Exception e) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return ApiResponse.onFailure("500", "Invalid or expired access token.", "data");
-            }
-        } else {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return ApiResponse.onFailure("500", "Authorization header missing or malformed.", "data");
+        if (quiz.isPresent()) {
+            quizDoneService.saveQuizDone(user, quiz.get(), true); //db 생성(isCorrect = true)
+            usersService.updateDiffLevelCnt(user.getId()); //diffQuizCnt++, levelQuizCnt++
+            // 성공 응답 반환
+            return ApiResponse.onSuccess("success");
+        }
+        else {
+            return ApiResponse.onFailure("500", "No Quiz", "data");
         }
     }
 
+
     // 퀴즈 틀렸을 때 api/ db 생성(isCorrect = false)
+    @Operation(summary = "퀴즈를 틀렸을 때", description = "퀴즈를 틀렸을 때, 틀렸다는 정보를 저장합니다.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = QuizResponseDTO.randomQuizResponseDTO.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "퀴즈 내용을 제대로 가지고 오지 못했습니다.",
+                    content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 에러, 관리자에게 문의 바랍니다.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorReasonDTO.class)))
+    })
     @GetMapping("/wrong/{quizId}")
-    public ApiResponse<String> quizWrong(@PathVariable Long quizId, HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        // Authorization 헤더에서 Access Token을 가져옵니다.
-        String header = request.getHeader("Authorization");
-        Users user;
-        Optional<Quiz> quiz;
+    public ApiResponse<String> quizWrong(@PathVariable Long quizId, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        Users user = usersService.getUserIdByToken(request, response);
+        Optional<Quiz> quiz = quizService.getQuizByQuizId(quizId);
 
-        if (header != null && header.startsWith("Bearer "))
-//        if(true)
-        {
-            String accessToken = header.substring(7); // "Bearer " 제거
-//            String accessToken;
-
-            try {
-                // Access Token을 이용해 사용자 정보를 조회합니다.
-                Userinfoplus userInfo = googleAuthService.getUserInfo(accessToken);
-//                System.out.println("User ID: " + userInfo.getId());
-//                System.out.println("User Email: " + userInfo.getEmail());
-//                System.out.println("User: " + usersService.getUserIdByEmail(userInfo.getEmail()).getId());
-//                userId = usersService.getUserIdByEmail(userInfo.getEmail()).getId();
-                user = usersService.getUserIdByEmail(userInfo.getEmail());
-                quiz = quizService.getQuizByQuizId(quizId);
-
-                if (quiz.isPresent()) {
-                    quizDoneService.saveQuizDone(user, quiz, false); //db 생성(isCorrect = false)
-                    // 성공 응답 반환
-                    return ApiResponse.onSuccess("success");
-                }
-                else
-                    return ApiResponse.onFailure("500", "No Quiz", "data");
-
-
-            } catch (Exception e) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return ApiResponse.onFailure("500", "Invalid or expired access token.", "data");
-            }
+        if (quiz.isPresent()) {
+            quizDoneService.saveQuizDone(user, quiz.get(), false); //db 생성(isCorrect = false)
+            // 성공 응답 반환
+            return ApiResponse.onSuccess("success");
         } else {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return ApiResponse.onFailure("500", "Authorization header missing or malformed.", "data");
+            return ApiResponse.onFailure("500", "No Quiz", "data");
         }
     }
 

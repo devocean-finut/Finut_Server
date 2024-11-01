@@ -17,7 +17,7 @@ public class QuizDoneService {
 
     QuizDone quizDone;
 
-    public void saveQuizDone(Users user, Optional<Quiz> quiz, boolean isCorrect) {
+    public void saveQuizDone(Users user, Quiz quiz, boolean isCorrect) {
         quizDone.setQuiz(quiz);
         quizDone.setUser(user);
         quizDone.setIsCorrect(isCorrect);
