@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -67,37 +65,54 @@ public class UsersService {
             attendRepository.save(attend);
             user.setTodaySalary(false);
             user.setAttendCount(user.getAttendCount() + 1);
+
+            // 처음 출석하는 경우만 연속 출석 일자 체크하는 변수에 값 추가
+            user.setContinuousCount(user.getContinuousCount() + 1);
             usersRepository.save(user);
 
-//            // 만약 연속 출석인 경우, XP 올리기
-//            if(hasFiveConsecutiveDays(userId)){
-//                user.setXP(user.getXP() + 5);
-//            }
+            // 만약 연속 출석 5회인 경우, XP 올리기 + 연속 출석 횟수 0으로 초기화
+            if(user.getContinuousCount() == 5){
+                user.setXP(user.getXP() + 5);
+                user.setContinuousCount(0);
+                msg = "연속 5회 출석했습니다!";
+            }
 
-//            // XP가 100이면 승진하기
-//            if(user.getXP() == 100){
-//                user.setLevel(user.getLevel());
-//            }
+            // XP가 100이면 승진하기
+            if(user.getXP() >= 100){
+                user.setXP(user.getXP() - 100);
+                Long newLevelId = user.getLevel().getId() + 1L; // id에 1 증가
+
+                // 증가된 id를 가진 Level 엔티티를 데이터베이스에서 조회하여 user에 설정
+                Level newLevel = levelRepository.findById(newLevelId)
+                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레벨입니다."));
+                user.setLevel(newLevel); // user에 새로운 Level 설정
+                msg = "승진했습니다!";
+            }
+
+            usersRepository.save(user);
         }
         else{
             // 처음 출석하는 경우가 아니라면
-            if(user.isTodaySalary()){
+            if(user.isTodaySalary()) {
                 // 오늘 이미 월급을 받았다면
                 msg = "오늘은 이미 월급을 받았습니다!";
-            }
-            else if(user.getAttendCount() == 5){
-                // attendCount가 5가 되었다면
-                user.setTodaySalary(true);
-                user.setAttendCount(0);
-                usersRepository.save(user);
-
-                Level level = levelRepository.findById(user.getLevel().getId());
-                user.setMoney(user.getMoney() + level.getSalary());
-                msg = "월급을 받았습니다!";
             }
             else {
                 user.setAttendCount(user.getAttendCount() + 1);
                 usersRepository.save(user);
+
+                if(user.getAttendCount() == 5){
+                    // attendCount가 5가 되었다면
+                    user.setTodaySalary(true);
+                    user.setAttendCount(0);
+
+                    Level level = levelRepository.findById(user.getLevel().getId())
+                            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레벨입니다."));;
+                    user.setMoney(user.getMoney() + level.getSalary());
+
+                    usersRepository.save(user);
+                    msg = "월급을 받았습니다!";
+                }
             }
         }
 
@@ -107,34 +122,6 @@ public class UsersService {
                 .build();
 
         return updateAttendance;
-    }
-
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-    public boolean hasFiveConsecutiveDays(Long userId) {
-        LocalDate today = LocalDate.now();
-
-        // 오늘 날짜 포함하여 5일치 데이터 가져오기
-        List<String> dateStrings = attendRepository.findTop5ByUserIdAndDateBeforeOrderByDateDesc(userId, today);
-
-        // 데이터가 부족한 경우 연속 5일이 아니므로 false
-        if (dateStrings.size() < 5) {
-            return false;
-        }
-
-        // 날짜를 LocalDate 형식으로 변환하여 오름차순 정렬
-        List<LocalDate> dates = dateStrings.stream()
-                .map(date -> LocalDate.parse(date, FORMATTER))
-                .sorted()
-                .toList();
-
-        // 연속적인 5일인지 확인
-        for (int i = 1; i < dates.size(); i++) {
-            if (!dates.get(i).minusDays(1).equals(dates.get(i - 1))) {
-                return false; // 연속되지 않은 날짜가 있으면 false 반환
-            }
-        }
-        return true;
     }
 
     public Users getUserIdByEmail(String email) {

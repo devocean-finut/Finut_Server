@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface LevelRepository extends JpaRepository<Level, Integer> {
 
-    Level findById(Long id);
+    Optional<Level> findById(Long id);
 }

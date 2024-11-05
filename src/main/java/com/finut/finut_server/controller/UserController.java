@@ -14,13 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "User Controller", description = "사용자 관련 api")
-@RequestMapping("/user")
+@RequestMapping("/attend")
 @RestController
 public class UserController {
     @Autowired
     private UsersService usersService;
 
-    @Operation(summary = "월급 받기", description = "출석체크 수가 5의 배수면 월급을 받는 API 입니다.")
+    @Operation(summary = "출석 체크", description = "출석체크 수가 5의 배수면 월급을 받는 API 입니다.")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = UserResponseDTO.updateAttendance.class))),
