@@ -5,14 +5,18 @@ import com.finut.finut_server.apiPayload.ApiResponse;
 import com.finut.finut_server.apiPayload.code.ErrorReasonDTO;
 import com.finut.finut_server.domain.product.Product;
 import com.finut.finut_server.domain.purchases.Purchases;
+import com.finut.finut_server.domain.user.Users;
 import com.finut.finut_server.service.ConsumptionService;
 import com.finut.finut_server.service.PurchasesService;
+import com.finut.finut_server.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +30,8 @@ public class ConsumptionController {
 
     private final ConsumptionService consumptionService;
     private final PurchasesService purchasesService;
+
+    private UsersService usersService;
 
     @Autowired
     public ConsumptionController(ConsumptionService consumptionService, PurchasesService purchasesService) {
@@ -73,8 +79,9 @@ public class ConsumptionController {
     })
     @Operation(summary = "물품 구매", description = "물품을 구매하기 위한 api 입니다")
     @GetMapping("/buy")
-    public ApiResponse<Purchases> buyProduct(@RequestParam Long userId, @RequestParam Long productId) {
-        return ApiResponse.onSuccess(PurchasesService.buyProduct(userId, productId));
+    public ApiResponse<Purchases> buyProduct(@RequestParam Long productId, HttpServletRequest request, HttpServletResponse response) {
+        Users user = usersService.getUserIdByToken(request, response);
+        return ApiResponse.onSuccess(PurchasesService.buyProduct(user.getId(), productId));
     }
 
     @ApiResponses(value = {
@@ -88,7 +95,8 @@ public class ConsumptionController {
     })
     @Operation(summary = "내 물품 보기", description = "구매한 물품들을 모두 위한 api 입니다")
     @GetMapping("/my-purchases")
-    public ApiResponse<List<Product>> readMyPurchases(@RequestParam Long userId) {
-        return ApiResponse.onSuccess(PurchasesService.getMyProducts(userId));
+    public ApiResponse<List<Product>> readMyPurchases(HttpServletRequest request, HttpServletResponse response) {
+        Users user = usersService.getUserIdByToken(request, response);
+        return ApiResponse.onSuccess(PurchasesService.getMyProducts(user.getId()));
     }
 }

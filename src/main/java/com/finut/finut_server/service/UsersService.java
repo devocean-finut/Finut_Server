@@ -6,9 +6,14 @@ import com.finut.finut_server.domain.attend.Attend;
 import com.finut.finut_server.domain.attend.AttendRepository;
 import com.finut.finut_server.domain.level.Level;
 import com.finut.finut_server.domain.level.LevelRepository;
+import com.finut.finut_server.domain.quiz.Quiz;
 import com.finut.finut_server.domain.user.UserResponseDTO;
 import com.finut.finut_server.domain.user.Users;
 import com.finut.finut_server.domain.user.UsersRepository;
+import com.google.api.services.oauth2.model.Userinfoplus;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +34,8 @@ public class UsersService {
 
     @Autowired
     private LevelRepository levelRepository;
+
+    GoogleAuthService googleAuthService;
 
     public void saveRefreshToken(String email, String refreshToken) {
         Optional<Users> optionalUser = usersRepository.findByEmail(email);
@@ -116,6 +122,45 @@ public class UsersService {
                 .build();
 
         return updateAttendance;
+    }
+
+    public Users getUserIdByEmail(String email) {
+        return usersRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+    }
+
+    public void updateDiffLevelCnt(Long userId) {
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+
+        user.setDiffQuizCount(user.getDiffQuizCount() + 1); // diffQuizCnt 증가
+        user.setLevelQuizCount(user.getLevelQuizCount() + 1); // levelQuizCnt 증가
+        usersRepository.save(user); // 변경사항 저장
+    }
+
+    public Users getUserIdByToken(HttpServletRequest request, HttpServletResponse response) {
+        // Authorization 헤더에서 Access Token을 가져옵니다.
+        String header = request.getHeader("Authorization");
+        Users user;
+        Optional<Quiz> quiz;
+
+        if (header != null && header.startsWith("Bearer "))
+        {
+            String accessToken = header.substring(7); // "Bearer " 제거
+            try {
+                // Access Token을 이용해 사용자 정보를 조회합니다.
+                Userinfoplus userInfo = googleAuthService.getUserInfo(accessToken);
+                user = getUserIdByEmail(userInfo.getEmail());
+                return user;
+
+            } catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return null;
+            }
+        } else {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return null;
+        }
     }
 }
 
