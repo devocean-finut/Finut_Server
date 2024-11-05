@@ -53,6 +53,9 @@ public class Users extends BaseTimeEntity {
     private boolean todaySalary = false;
 
     @Column(nullable = false)
+    private int continuousCount = 0; // 연속 출석 횟수 구하기
+
+    @Column(nullable = false)
     private int diffQuizCount = 0;
 
     @Column(nullable = false)
