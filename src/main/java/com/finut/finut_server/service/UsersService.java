@@ -99,11 +99,12 @@ public class UsersService {
                     // attendCount가 5가 되었다면
                     user.setTodaySalary(true);
                     user.setAttendCount(0);
-                    usersRepository.save(user);
 
                     Level level = levelRepository.findById(user.getLevel().getId())
                             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레벨입니다."));;
                     user.setMoney(user.getMoney() + level.getSalary());
+
+                    usersRepository.save(user);
                     msg = "월급을 받았습니다!";
                 }
             }
