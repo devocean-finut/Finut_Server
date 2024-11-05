@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "User Controller", description = "사용자 관련 api")
-@RequestMapping("/attend")
+@RequestMapping("/user")
 @RestController
 public class UserController {
     @Autowired
@@ -30,7 +30,7 @@ public class UserController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorReasonDTO.class)))
     })
-    @PatchMapping("")
+    @PatchMapping("/attend")
     public ApiResponse<UserResponseDTO.updateAttendance> updateAttendance(@RequestBody UserRequestDTO.checkAttendance request){
         UserResponseDTO.updateAttendance updateAttendance = usersService.updateAttendDate(request.getUserId());
         return ApiResponse.onSuccess(updateAttendance);
