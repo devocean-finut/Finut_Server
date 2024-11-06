@@ -7,6 +7,7 @@ import lombok.*;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "Difficulty")
 public class Difficulty {
 
@@ -16,7 +17,6 @@ public class Difficulty {
 
     @Column(nullable = false)
     private int diffQuizCnt;
-
-    @OneToOne(mappedBy = "difficulty")
-    private Users user;
+//    @OneToOne(mappedBy = "difficulty")
+//    private Users user;
 }
