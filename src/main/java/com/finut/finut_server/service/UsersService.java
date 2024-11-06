@@ -11,7 +11,6 @@ import com.finut.finut_server.domain.user.UserResponseDTO;
 import com.finut.finut_server.domain.user.Users;
 import com.finut.finut_server.domain.user.UsersRepository;
 import com.google.api.services.oauth2.model.Userinfoplus;
-import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +35,8 @@ public class UsersService {
     @Autowired
     private LevelRepository levelRepository;
 
-    GoogleAuthService googleAuthService;
+    @Autowired
+    private GoogleAuthService googleAuthService;
 
     public void saveRefreshToken(String email, String refreshToken) {
         Optional<Users> optionalUser = usersRepository.findByEmail(email);
@@ -122,6 +123,21 @@ public class UsersService {
                 .build();
 
         return updateAttendance;
+    }
+
+    public UserResponseDTO.viewUserInfo viewUserInfo(Long userId) {
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException(ErrorStatus.MEMBER_NOT_FOUND));
+        UserResponseDTO.viewUserInfo viewUserInfo = UserResponseDTO.viewUserInfo.builder()
+                .userId(userId)
+                .name(user.getName())
+                .money(user.getMoney())
+                .picture(user.getPicture())
+                .xp(user.getXP())
+                .levelName(user.getLevel().getLevelName().getKoreanName())
+                .build();
+
+        return viewUserInfo;
     }
 
     public Users getUserIdByEmail(String email) {

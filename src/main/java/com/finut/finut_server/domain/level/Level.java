@@ -18,7 +18,8 @@ public class Level extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private LevelName level; // 직급
+    @Enumerated(EnumType.STRING)
+    private LevelName levelName; // 직급
 
     @Column(nullable = false)
     private int salary; // 월급 액수
