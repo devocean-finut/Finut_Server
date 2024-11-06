@@ -22,4 +22,17 @@ public class UserResponseDTO {
         Long userId;
         String message;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class viewUserInfo {
+        Long userId;
+        String name;
+        Long money;
+        String picture;
+        int xp;
+        String levelName;
+    }
 }
