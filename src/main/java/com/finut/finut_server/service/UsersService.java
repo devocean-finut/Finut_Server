@@ -160,6 +160,7 @@ public class UsersService {
         Users user;
         Optional<Quiz> quiz;
 
+        System.out.println(header);
         if (header != null && header.startsWith("Bearer "))
         {
             String accessToken = header.substring(7); // "Bearer " 제거
