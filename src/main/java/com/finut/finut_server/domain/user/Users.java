@@ -3,11 +3,13 @@ package com.finut.finut_server.domain.user;
 
 import com.finut.finut_server.domain.BaseTimeEntity;
 import com.finut.finut_server.domain.difficulty.Difficulty;
+import com.finut.finut_server.domain.difficulty.DifficultyType;
 import com.finut.finut_server.domain.quizDone.QuizDone;
 import com.finut.finut_server.domain.level.Level;
 import com.finut.finut_server.domain.level.LevelName;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.mapping.ToOne;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -42,7 +44,7 @@ public class Users extends BaseTimeEntity {
     @Column(nullable = false)
     private Long money = 100000L;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "levelId", referencedColumnName = "id")
     private Level level;
 
@@ -64,9 +66,7 @@ public class Users extends BaseTimeEntity {
     @Column(nullable = false)
     private int levelQuizCount = 0;
 
-
-
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "difficulty")
     private Difficulty difficulty;
 
@@ -105,6 +105,11 @@ public class Users extends BaseTimeEntity {
         if (this.level == null) {
             this.level = new Level(); // 또는 LevelRepository를 사용해 ID가 1인 Level을 설정
             this.level.setId(1L); // 기본값으로 ID가 1인 Level 설정
+        }
+
+        if (this.difficulty == null) {
+            this.difficulty = new Difficulty();
+            this.difficulty.setDifficulty(DifficultyType.LO);
         }
     }
 }

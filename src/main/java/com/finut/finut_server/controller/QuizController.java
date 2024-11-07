@@ -52,7 +52,7 @@ public class QuizController {
     @Operation(summary = "랜덤으로 퀴즈 내용 불러오기", description = "유저가 풀지 않았던 문제 중에서 퀴즈를 랜덤으로 하나 가져옵니다.")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = QuizResponseDTO.randomQuizResponseDTO.class))),
+                    schema = @Schema(implementation = Quiz.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "퀴즈 내용을 제대로 가지고 오지 못했습니다.",
                     content = @Content),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 에러, 관리자에게 문의 바랍니다.",
@@ -73,7 +73,7 @@ public class QuizController {
     @Operation(summary = "퀴즈를 맞췄을 때", description = "퀴즈를 맞췄을 때 QuizDone DB에 해당 내용을 저장하고, 난이도 상승에 필요한 퀴즈 개수와 레벨업에 필요한 퀴즈 개수를 증가시킵니다.")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = QuizResponseDTO.randomQuizResponseDTO.class))),
+                    schema = @Schema(implementation = String.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "퀴즈 내용을 제대로 가지고 오지 못했습니다.",
                     content = @Content),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 에러, 관리자에게 문의 바랍니다.",
@@ -102,7 +102,7 @@ public class QuizController {
     @Operation(summary = "퀴즈를 틀렸을 때", description = "퀴즈를 틀렸을 때, 틀렸다는 정보를 저장합니다.")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = QuizResponseDTO.randomQuizResponseDTO.class))),
+                    schema = @Schema(implementation = String.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "퀴즈 내용을 제대로 가지고 오지 못했습니다.",
                     content = @Content),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 에러, 관리자에게 문의 바랍니다.",
