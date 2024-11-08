@@ -84,6 +84,11 @@ public class QuizController {
     @GetMapping("/correct/{quizId}")
     public ApiResponse<String> quizCorrect(@PathVariable Long quizId, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Users user = usersService.getUserIdByToken(request, response);
+
+        if (user == null) {
+            return ApiResponse.onFailure("401", "User not authenticated", "data");
+        }
+
         Optional<Quiz> quiz = quizService.getQuizByQuizId(quizId);
 
         if (quiz.isPresent()) {
