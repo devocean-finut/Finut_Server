@@ -36,6 +36,7 @@ public class QuizService {
     public Optional<Quiz> getQuiz(Long userId) {
         Optional<Users> userOpt = usersRepository.findById(userId);
         if (userOpt.isEmpty()) {
+            System.out.println("userOpt is empty");
             return Optional.empty();
         }
         Users user = userOpt.get();
@@ -57,6 +58,7 @@ public class QuizService {
 
         // 남은 퀴즈가 없으면 Optional.empty() 반환
         if (uncompletedQuizzes.isEmpty()) {
+            System.out.println("uncomplete Quizzes is empty");
             return Optional.empty();
         }
 
