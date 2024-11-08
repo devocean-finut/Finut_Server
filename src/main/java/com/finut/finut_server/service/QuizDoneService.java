@@ -8,8 +8,6 @@ import com.finut.finut_server.domain.user.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class QuizDoneService {
 
@@ -19,17 +17,18 @@ public class QuizDoneService {
 
 
     public void saveQuizDone(Users user, Quiz quiz, boolean isCorrect) {
-        QuizDone quizDone = new QuizDone(user, quiz, isCorrect);
-//        QuizDoneId quizDoneId = new QuizDoneId();
-//
-//        quizDoneId.setQuizId(quiz.getId());
-//        quizDoneId.setUserId(user.getId());
-//
-//        quizDone.setId(quizDoneId);
-//
-//        quizDone.setQuiz(quiz);
-//        quizDone.setUser(user);
-//        quizDone.setIsCorrect(isCorrect);
+        QuizDone quizDone = new QuizDone();
+        QuizDoneId quizDoneId = new QuizDoneId();
+
+        quizDoneId.setQuizId(quiz.getId());
+        quizDoneId.setUserId(user.getId());
+
+        quizDone.setQuizId(quiz.getId());
+        quizDone.setUserId(user.getId());
+
+        quizDone.setQuiz(quiz);
+        quizDone.setUser(user);
+        quizDone.setIsCorrect(isCorrect);
         quizDoneRepository.save(quizDone);
     }
 

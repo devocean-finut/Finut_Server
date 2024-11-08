@@ -8,6 +8,7 @@ import com.finut.finut_server.domain.user.Users;
 import com.finut.finut_server.domain.user.UsersRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,8 +48,8 @@ public class QuizService {
         List<Quiz> allQuizzesByDiff = quizRepository.findByDifficulty(quizDiff);
 
         // 해당 사용자가 완료한 퀴즈 ID 목록 가져오기
-        Set<Long> completedQuizIds = quizDoneRepository.findByIdUserId(userId).stream()
-                .map(quizDone -> quizDone.getQuiz().getId())
+        Set<Long> completedQuizIds = quizDoneRepository.findByUserId(userId).stream()
+                .map(quizDone -> quizDone.getQuizId())
                 .collect(Collectors.toSet());
 
         // 완료한 퀴즈는 제외한 남은 퀴즈 목록 생성

@@ -7,6 +7,7 @@ import com.finut.finut_server.domain.quizDone.QuizDone;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,5 +38,9 @@ public class Quiz extends BaseTimeEntity {
     private String description; // 정답 설명
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<QuizDone> quizDoneList;
+    private List<QuizDone> quizDoneList;
+
+    public Quiz(Long quizId, DifficultyType difficultyType, String question, AnswerType answerType) {
+        super();
+    }
 }

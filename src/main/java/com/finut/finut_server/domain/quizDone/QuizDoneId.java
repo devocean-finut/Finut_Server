@@ -1,35 +1,28 @@
 package com.finut.finut_server.domain.quizDone;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@Getter
 @Setter
-@Embeddable
-public class QuizDoneId implements Serializable {
-
-    @Column(name = "quiz_id")
+public class QuizDoneId  implements Serializable {
     private Long quizId;
-
-    @Column(name = "user_id")
     private Long userId;
 
-    // equals 메서드
+    // Default constructor, hashCode, equals
+    @Override
+    public int hashCode(){
+        return Objects.hash(quizId, userId);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         QuizDoneId that = (QuizDoneId) o;
-        return Objects.equals(quizId, that.quizId) &&
-                Objects.equals(userId, that.userId);
-    }
-
-    // hashCode 메서드
-    @Override
-    public int hashCode() {
-        return Objects.hash(quizId, userId);
+        return Objects.equals(quizId, that.quizId) && Objects.equals(userId, that.userId);
     }
 }

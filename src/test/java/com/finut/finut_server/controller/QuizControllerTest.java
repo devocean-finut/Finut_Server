@@ -1,15 +1,23 @@
 package com.finut.finut_server.controller;
 
+import com.finut.finut_server.apiPayload.ApiResponse;
+import com.finut.finut_server.domain.difficulty.DifficultyType;
+import com.finut.finut_server.domain.quiz.AnswerType;
 import com.finut.finut_server.domain.quiz.Quiz;
 import com.finut.finut_server.domain.user.Users;
 import com.finut.finut_server.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,54 +33,70 @@ import java.util.Optional;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(QuizController.class)
+@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class QuizControllerTest {
-    @Autowired
-    private WebApplicationContext context;
 
-    @Autowired
-
-    private MockMvc mockMvc;
-
-    @MockBean
-    private QuizService quizService;
-
-    @MockBean
-    private QuizDoneService quizDoneService;
-
-    @MockBean
+    @Mock
     private UsersService usersService;
 
-    @MockBean
-    private GoogleAuthService googleAuthService;
+    @Mock
+    private QuizService quizService;
 
-    @BeforeEach
-    public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
-    }
+    @Mock
+    private QuizDoneService quizDoneService;
+
+    @InjectMocks
+    private QuizController quizController;
+
+        @Test
+        public void testQuizCorrectSuccess() throws Exception {
+            // Arrange
+            Long quizId = 1L;
+            Users mockUser = new Users(); // 필요한 필드 초기화
+            mockUser.setId(1L); // ID 설정 등 필요한 필드 추가
+            Quiz mockQuiz = new Quiz(quizId, DifficultyType.LO, "question", AnswerType.TRUE); // 필요한 필드 초기화
+
+            HttpServletRequest mockRequest = mock(HttpServletRequest.class);
+            HttpServletResponse mockResponse = mock(HttpServletResponse.class);
+
+            when(quizService.getQuizByQuizId(quizId)).thenReturn(Optional.of(mockQuiz));
+            when(usersService.getUserIdByToken(mockRequest, mockResponse))
+                    .thenReturn(mockUser);
+
+            // Act
+            ApiResponse<String> response = quizController.quizCorrect(quizId, mockRequest, mockResponse);
+
+            // Assert
+            assertEquals("success", response.getMessage());
+            assertEquals("200", response.getStatusCode());
+
+            verify(quizDoneService).saveQuizDone(mockUser, mockQuiz, true);
+            verify(usersService).updateDiffLevelCnt(mockUser.getId());
+        }
+
 
     @Test
-    public void testQuizCorrectSuccess() throws Exception {
-        // Mock data
+    public void testQuizCorrectFailure_NoQuiz() throws Exception {
+        // Arrange
         Long quizId = 1L;
-        Users mockUser = new Users(); // Replace with actual Users object setup
-        Quiz mockQuiz = mock(Quiz.class); // Replace with actual Quiz object setup
+        Users mockUser = new Users();
 
-        // Mock behavior
-        when(usersService.getUserIdByToken(any(HttpServletRequest.class), any(HttpServletResponse.class)))
-                .thenReturn(mockUser);
-        when(quizService.getQuizByQuizId(quizId)).thenReturn(Optional.of(mockQuiz));
+        HttpServletRequest mockRequest = mock(HttpServletRequest.class);
+        HttpServletResponse mockResponse = mock(HttpServletResponse.class);
 
-        // Perform test
-        mockMvc.perform(get("/correct/{quizId}", quizId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect((ResultMatcher) jsonPath("$.message").value("success"));
+        when(usersService.getUserIdByToken(mockRequest, mockResponse)).thenReturn(mockUser);
+        when(quizService.getQuizByQuizId(quizId)).thenReturn(Optional.empty());
 
-        // Verify that services were called as expected
+        // Act
+        ApiResponse<String> response = quizController.quizCorrect(quizId, mockRequest, mockResponse);
 
-        verify(quizDoneService, times(1)).saveQuizDone(mockUser, mockQuiz, true);
-        verify(usersService, times(1)).updateDiffLevelCnt(mockUser.getId());
+        // Assert
+        assertEquals("500", response.getStatusCode());
+        assertEquals("No Quiz", response.getMessage());
+
+        verify(quizDoneService, never()).saveQuizDone(any(), any(), anyBoolean());
+        verify(usersService, never()).updateDiffLevelCnt(any());
     }
 
 }
