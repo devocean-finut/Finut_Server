@@ -48,7 +48,7 @@ public class QuizService {
         List<Quiz> allQuizzesByDiff = quizRepository.findByDifficulty(quizDiff);
 
         // 해당 사용자가 완료한 퀴즈 ID 목록 가져오기
-        Set<Long> completedQuizIds = quizDoneRepository.findByUserId(userId).stream()
+        Set<Long> completedQuizIds = quizDoneRepository.findAllByUserId(userId).stream()
                 .map(quizDone -> quizDone.getQuizId())
                 .collect(Collectors.toSet());
 

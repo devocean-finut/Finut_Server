@@ -63,8 +63,8 @@ public class Users extends BaseTimeEntity {
     @Column(nullable = false)
     private int diffQuizCount = 0;
 
-    @Column(nullable = false)
-    private int levelQuizCount = 0;
+//    @Column(nullable = false)
+//    private int levelQuizCount = 0;
 
     @ManyToOne
     @JoinColumn(name = "difficulty")

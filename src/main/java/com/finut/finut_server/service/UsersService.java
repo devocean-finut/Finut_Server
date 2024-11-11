@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -145,13 +146,15 @@ public class UsersService {
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
     }
 
-    public void updateDiffLevelCnt(Long userId) {
+    public UserResponseDTO.checkUserXP updateDiffLevelCnt(Long userId) {
         Users user = usersRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
 
         user.setDiffQuizCount(user.getDiffQuizCount() + 1); // diffQuizCnt 증가
-        user.setLevelQuizCount(user.getLevelQuizCount() + 1); // levelQuizCnt 증가
+        user.setXP(user.getXP() + 25); // XP 증가
         usersRepository.save(user); // 변경사항 저장
+
+    return  new UserResponseDTO.checkUserXP(user.getId(), user.getName(), user.getMoney(), user.getXP(), user.getLevel());
     }
 
     public Users getUserIdByToken(HttpServletRequest request, HttpServletResponse response) {

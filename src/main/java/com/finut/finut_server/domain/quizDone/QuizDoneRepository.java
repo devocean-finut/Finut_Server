@@ -5,6 +5,7 @@ import com.finut.finut_server.domain.user.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import java.util.List;
 import java.util.Optional;
 
 @EnableJpaRepositories
@@ -12,4 +13,6 @@ public interface QuizDoneRepository extends JpaRepository<QuizDone, QuizDoneId> 
     Optional<QuizDone> findByQuizIdAndUserId(Long quizId, Long userId);
 
     Optional<QuizDone> findByUserId(Long userId);
+
+    List<QuizDone> findAllByUserId(Long userId);
 }

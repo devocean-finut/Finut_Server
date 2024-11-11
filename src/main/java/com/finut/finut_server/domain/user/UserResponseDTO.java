@@ -1,5 +1,7 @@
 package com.finut.finut_server.domain.user;
 
+import com.finut.finut_server.domain.level.Level;
+import com.finut.finut_server.domain.level.LevelName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,4 +37,18 @@ public class UserResponseDTO {
         int xp;
         String levelName;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class checkUserXP {
+        Long userId;
+        String name;
+        Long money;
+        int xp;
+        Level levelName;
+    }
+
+
 }

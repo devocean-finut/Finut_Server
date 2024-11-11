@@ -4,6 +4,7 @@ import com.finut.finut_server.apiPayload.ApiResponse;
 import com.finut.finut_server.apiPayload.code.ErrorReasonDTO;
 import com.finut.finut_server.domain.quiz.Quiz;
 import com.finut.finut_server.domain.quiz.QuizResponseDTO;
+import com.finut.finut_server.domain.user.UserResponseDTO;
 import com.finut.finut_server.domain.user.Users;
 import com.finut.finut_server.service.GoogleAuthService;
 import com.finut.finut_server.service.QuizDoneService;
@@ -70,7 +71,7 @@ public class QuizController {
 
 
 
-    @Operation(summary = "퀴즈를 맞췄을 때", description = "퀴즈를 맞췄을 때 QuizDone DB에 해당 내용을 저장하고, 난이도 상승에 필요한 퀴즈 개수와 레벨업에 필요한 퀴즈 개수를 증가시킵니다.")
+    @Operation(summary = "퀴즈를 맞췄을 때", description = "퀴즈를 맞췄을 때 QuizDone DB에 해당 내용을 저장하고, 난이도 상승에 필요한 퀴즈 개수와 레벨업에 필요한 XP를 증가시킵니다.")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = String.class))),
@@ -80,25 +81,27 @@ public class QuizController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorReasonDTO.class)))
     })
-    // 퀴즈 맞췄을 때 api/ db 생성(isCorrect = true), diffQuizCnt++, levelQuizCnt++
+    // 퀴즈 맞췄을 때 api/ db 생성(isCorrect = true), diffQuizCnt++, xp + 25
     @GetMapping("/correct/{quizId}")
-    public ApiResponse<String> quizCorrect(@PathVariable Long quizId, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public ApiResponse<UserResponseDTO.checkUserXP> quizCorrect(@PathVariable Long quizId, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         Users user = usersService.getUserIdByToken(request, response);
 
+        UserResponseDTO.checkUserXP checkUserXP = null;
+
         if (user == null) {
-            return ApiResponse.onFailure("401", "User not authenticated", "data");
+            return ApiResponse.onFailure("401", "User not authenticated", checkUserXP);
         }
 
         Optional<Quiz> quiz = quizService.getQuizByQuizId(quizId);
 
         if (quiz.isPresent()) {
             quizDoneService.saveQuizDone(user, quiz.get(), true); //db 생성(isCorrect = true)
-            usersService.updateDiffLevelCnt(user.getId()); //diffQuizCnt++, levelQuizCnt++
+            checkUserXP = usersService.updateDiffLevelCnt(user.getId()); //diffQuizCnt++, xp + 25
             // 성공 응답 반환
-            return ApiResponse.onSuccess("success");
+            return ApiResponse.onSuccess(checkUserXP);
         }
         else {
-            return ApiResponse.onFailure("500", "No Quiz", "data");
+            return ApiResponse.onFailure("500", "No Quiz", checkUserXP);
         }
     }
 
