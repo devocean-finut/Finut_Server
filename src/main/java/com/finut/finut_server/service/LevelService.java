@@ -27,6 +27,7 @@ public class LevelService {
 
         if (nextLevelOpt.isPresent()) {
             user.setLevel(nextLevelOpt.get());
+            user.setXP(0);
             usersRepository.save(user);
             return user;
         } else {
