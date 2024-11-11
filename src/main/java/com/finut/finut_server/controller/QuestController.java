@@ -3,6 +3,7 @@ package com.finut.finut_server.controller;
 import com.finut.finut_server.apiPayload.ApiResponse;
 import com.finut.finut_server.apiPayload.code.ErrorReasonDTO;
 import com.finut.finut_server.domain.quest.Quest;
+import com.finut.finut_server.domain.quest.QuestDTO;
 import com.finut.finut_server.domain.questQuiz.QuestQuiz;
 import com.finut.finut_server.domain.questQuiz.QuestQuizRepository;
 import com.finut.finut_server.domain.quiz.Quiz;
@@ -43,7 +44,7 @@ public class QuestController {
     @Operation(summary = "전체 퀘스트 가져오기", description = "전체 퀘스트를 가져옵니다")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = Quiz.class))),
+                    schema = @Schema(implementation = Quest.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "퀴즈 내용을 제대로 가지고 오지 못했습니다.",
                     content = @Content),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 에러, 관리자에게 문의 바랍니다.",
@@ -51,8 +52,8 @@ public class QuestController {
                             schema = @Schema(implementation = ErrorReasonDTO.class)))
     })
     @GetMapping("")
-    public ApiResponse<List<Quest>> getQuests(HttpServletRequest request, HttpServletResponse response){
-        List<Quest> quests = questService.getAllQuests();
+    public ApiResponse<List<QuestDTO>> getQuests(HttpServletRequest request, HttpServletResponse response){
+        List<QuestDTO> quests = questService.getAllQuests();
         return ApiResponse.onSuccess(quests);
     }
 
@@ -60,7 +61,7 @@ public class QuestController {
     @Operation(summary = "해당 퀘스트 퀴즈들 가져오기", description = "해당 퀘스트의 퀴즈을 모두 가져옵니다.")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = Quiz.class))),
+                    schema = @Schema(implementation = QuestQuiz.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "퀴즈 내용을 제대로 가지고 오지 못했습니다.",
                     content = @Content),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 에러, 관리자에게 문의 바랍니다.",
@@ -72,6 +73,8 @@ public class QuestController {
         List<QuestQuiz> questQuizzes = questQuizService.getQuestQuizzes(questId);
         return ApiResponse.onSuccess(questQuizzes);
     }
+
+
 
 
 
