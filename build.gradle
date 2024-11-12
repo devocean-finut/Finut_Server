@@ -4,6 +4,15 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.5'
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.finut.finut_server.FinutServerApplication'
+        )
+    }
+}
+
+
 group = 'com.finut'
 version = '0.0.1-SNAPSHOT'
 
@@ -48,9 +57,14 @@ dependencies {
 
     // mysql 설정
     runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
 
     //RSS 툴
     implementation 'com.rometools:rome:1.15.0'
+
+    //MariaDB
+    implementation("org.mariadb.jdbc:mariadb-java-client")
+
 }
 
 tasks.named('test') {
