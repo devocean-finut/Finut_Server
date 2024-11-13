@@ -14,13 +14,11 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up SSH key
-        uses: webfactory/ssh-agent@v0.7.0
+        uses: appleboy/ssh-action@master
         with:
-          ssh-private-key: ${{ secrets.FINUT_SSH_KEY }}
-
-      - name: Deploy to EC2
-        env:
-          EC2_HOST: ${{ secrets.FINUT_EC2_HOST }}
-          EC2_USER: ${{ secrets.FINUT_EC2_USER }}
-        run: |
-          ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST 'cd app && ./deploy.sh'
+          key: ${{ secrets.FINUT_SSH_KEY }}
+          host: ${{ secrets.FINUT_EC2_HOST }}
+          username: ${{ secrets.FINUT_EC2_USER }} 
+          script: |
+            cd app
+            ./deploy.sh
