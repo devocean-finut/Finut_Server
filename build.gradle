@@ -4,6 +4,15 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.5'
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.finut.finut_server.FinutServerApplication'
+        )
+    }
+}
+
+
 group = 'com.finut'
 version = '0.0.1-SNAPSHOT'
 
@@ -28,7 +37,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2' // 스웨거
+    implementation 'org.jsoup:jsoup:1.15.3' // 크롤링
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     compileOnly 'org.projectlombok:lombok'
@@ -36,8 +46,25 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // Google Auth Library for OAuth 2.0
+    implementation 'com.google.auth:google-auth-library-oauth2-http:1.8.0'
+
+    // Google API Client Library for OAuth2
+    implementation 'com.google.apis:google-api-services-oauth2:v2-rev151-1.25.0'
+
+    // JSON Parsing (Gson)
+    implementation 'com.google.http-client:google-http-client-gson:1.41.6'
+
     // mysql 설정
     runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
+
+    //RSS 툴
+    implementation 'com.rometools:rome:1.15.0'
+
+    //MariaDB
+    implementation("org.mariadb.jdbc:mariadb-java-client")
+
 }
 
 tasks.named('test') {
