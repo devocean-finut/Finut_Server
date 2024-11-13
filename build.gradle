@@ -13,6 +13,7 @@ jar {
 }
 
 
+
 group = 'com.finut'
 version = '0.0.1-SNAPSHOT'
 
@@ -33,6 +34,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
