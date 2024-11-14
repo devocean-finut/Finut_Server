@@ -28,7 +28,7 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
                                 .permitAll()
-                                .requestMatchers("/", "/login/**", "/h2-console/**").permitAll()
+                                .requestMatchers("/", "/h2-console/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2Login ->
