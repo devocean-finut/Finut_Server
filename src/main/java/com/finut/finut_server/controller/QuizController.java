@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -74,7 +75,7 @@ public class QuizController {
     @Operation(summary = "퀴즈를 맞췄을 때", description = "퀴즈를 맞췄을 때 QuizDone DB에 해당 내용을 저장하고, 난이도 상승에 필요한 퀴즈 개수와 레벨업에 필요한 XP를 증가시킵니다.")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = String.class))),
+                    schema = @Schema(implementation = UserResponseDTO.checkUserXP.class))),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "퀴즈 내용을 제대로 가지고 오지 못했습니다.",
                     content = @Content),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 에러, 관리자에게 문의 바랍니다.",
@@ -129,6 +130,25 @@ public class QuizController {
         } else {
             return ApiResponse.onFailure("500", "No Quiz", "data");
         }
+    }
+
+    @Operation(summary = "레벨 테스트 조회", description = "레벨 테스트를 위한 퀴즈 조회 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Quiz.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "퀴즈 내용을 제대로 가지고 오지 못했습니다.",
+                    content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 에러, 관리자에게 문의 바랍니다.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorReasonDTO.class)))
+    })
+    @GetMapping("/level")
+    public ApiResponse<List<Quiz>> getQuizToLevelTest(HttpServletRequest request, HttpServletResponse response){
+        Users user = usersService.getUserIdByToken(request, response);
+        List<Quiz> quiz = quizService.getQuizToLevelTest(user.getId());
+        if(!quiz.isEmpty())
+            return ApiResponse.onSuccess(quiz);
+        return ApiResponse.onFailure("400", "퀴즈 내용을 제대로 가져오지 못했습니다", quiz);
     }
 
 }
