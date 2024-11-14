@@ -60,8 +60,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // 프론트엔드 도메인
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD")); // 허용할 HTTP 메서드
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://ec2-15-165-175-91.ap-northeast-2.compute.amazonaws.com:8080"));        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD")); // 허용할 HTTP 메서드
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // 허용할 헤더
         configuration.setExposedHeaders(Arrays.asList("Authorization")); // 응답에서 노출할 헤더
         configuration.setAllowCredentials(true); // 자격 증명 포함 요청 허용
