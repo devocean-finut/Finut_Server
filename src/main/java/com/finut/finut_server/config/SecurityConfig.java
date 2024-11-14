@@ -28,12 +28,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
         http
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
-                                .permitAll()
-                                .requestMatchers("/", "/h2-console/**", "/oauth2/authorization/**").permitAll()
-                                .anyRequest().authenticated()
+//                .authorizeHttpRequests(authorizeRequests ->
+//                        authorizeRequests
+//                                .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
+//                                .permitAll()
+//                                .requestMatchers("/", "/h2-console/**", "/oauth2/authorization/**").permitAll()
+//                                .anyRequest().authenticated()
+//                )
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2Login ->
                         oauth2Login
@@ -42,9 +45,9 @@ public class SecurityConfig {
                                 )
                                 .defaultSuccessUrl("/success", true)
                 )
-                .csrf(AbstractHttpConfigurer::disable) // post 요청을 위한 csrf disable
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
+                .csrf(AbstractHttpConfigurer::disable); // post 요청을 위한 csrf disable
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+//                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
 
         return http.build();
     }
