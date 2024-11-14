@@ -151,4 +151,21 @@ public class QuizController {
         return ApiResponse.onFailure("400", "퀴즈 내용을 제대로 가져오지 못했습니다", quiz);
     }
 
+    @Operation(summary = "레벨 테스트 결과 조회", description = "레벨 테스트를 위한 퀴즈 조회 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공", content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Quiz.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "퀴즈 내용을 제대로 가지고 오지 못했습니다.",
+                    content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 에러, 관리자에게 문의 바랍니다.",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorReasonDTO.class)))
+    })
+    @GetMapping("/level/result")
+    public ApiResponse<QuizResponseDTO.quizResultResponseDTO> getQuizLevelResult(@RequestParam int score, HttpServletRequest request, HttpServletResponse response){
+        Users user = usersService.getUserIdByToken(request, response);
+        QuizResponseDTO.quizResultResponseDTO quizLevelResult = quizService.getQuizLevelResult(user.getId(), score);
+        return ApiResponse.onSuccess(quizLevelResult);
+    }
+
 }

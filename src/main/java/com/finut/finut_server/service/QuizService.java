@@ -1,8 +1,11 @@
 package com.finut.finut_server.service;
 
+import com.finut.finut_server.domain.difficulty.Difficulty;
 import com.finut.finut_server.domain.difficulty.DifficultyType;
+import com.finut.finut_server.domain.level.Level;
 import com.finut.finut_server.domain.quiz.Quiz;
 import com.finut.finut_server.domain.quiz.QuizRepository;
+import com.finut.finut_server.domain.quiz.QuizResponseDTO;
 import com.finut.finut_server.domain.quizDone.QuizDoneRepository;
 import com.finut.finut_server.domain.user.Users;
 import com.finut.finut_server.domain.user.UsersRepository;
@@ -78,6 +81,27 @@ public class QuizService {
         List<Quiz> uncompletedQuizzes = quizRepository.findQuizzesByDifficulty();
 
         return uncompletedQuizzes;
+    }
+
+    @Transactional
+    public QuizResponseDTO.quizResultResponseDTO getQuizLevelResult(Long userId, int score) {
+        Users users = usersRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Difficulty difficulty = new Difficulty();
+        QuizResponseDTO.quizResultResponseDTO quizResultResponseDTO = new QuizResponseDTO.quizResultResponseDTO();
+        if(score >= 20){
+            difficulty.setDifficulty(DifficultyType.HI);
+            users.setDifficulty(difficulty);
+            quizResultResponseDTO.setDifficulty("HIGH");
+        } else if(score >= 9){
+            difficulty.setDifficulty(DifficultyType.MI);
+            users.setDifficulty(difficulty);
+            quizResultResponseDTO.setDifficulty("MIDDLE");
+        }
+        else{
+            quizResultResponseDTO.setDifficulty("LOW");
+        }
+        usersRepository.save(users);
+        return quizResultResponseDTO;
     }
 
     public Optional<Quiz> getQuizByQuizId(Long quizId) {
