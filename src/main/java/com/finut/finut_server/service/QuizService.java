@@ -67,6 +67,18 @@ public class QuizService {
         return Optional.of(uncompletedQuizzes.get(random.nextInt(uncompletedQuizzes.size())));
     }
 
+    @Transactional
+    public List<Quiz> getQuizToLevelTest(Long userId) {
+        Optional<Users> userOpt = usersRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            System.out.println("userOpt is empty");
+            return null;
+        }
+        // 퀴즈 목록 생성
+        List<Quiz> uncompletedQuizzes = quizRepository.findQuizzesByDifficulty();
+
+        return uncompletedQuizzes;
+    }
 
     public Optional<Quiz> getQuizByQuizId(Long quizId) {
         return quizRepository.findById(quizId);
