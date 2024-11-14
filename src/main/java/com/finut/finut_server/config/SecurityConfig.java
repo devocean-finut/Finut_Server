@@ -1,15 +1,22 @@
 package com.finut.finut_server.config;
 
+
+import com.finut.finut_server.apiPayload.exception.handler.CustomOAuth2AuthenticationSuccessHandler;
 import com.finut.finut_server.config.auth.CustomOAuth2UserService;
 import com.finut.finut_server.domain.user.UsersRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -19,7 +26,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
+                                .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
+                                .permitAll()
                                 .requestMatchers("/", "/login/**", "/h2-console/**").permitAll()
                                 .anyRequest().authenticated()
                 )
@@ -30,17 +38,27 @@ public class SecurityConfig {
                                 )
                                 .defaultSuccessUrl("/success", true)
                 )
+                .formLogin(formLogin ->
+                        formLogin
+                                .defaultSuccessUrl("/success", true)
+                )
                 .logout(logout ->
                         logout
-                                .logoutSuccessUrl("/") // 임시 로그아웃 성공 URL
+                                .logoutSuccessUrl("/") // 임시
                 )
-                .csrf(AbstractHttpConfigurer::disable) // POST 요청을 위한 CSRF 비활성화
+                .csrf(AbstractHttpConfigurer::disable) // post 요청을 위한 csrf disable
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
-
-        // 폼 로그인을 완전히 비활성화
-        http.formLogin(AbstractHttpConfigurer::disable);
-
         return http.build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails user = User.withDefaultPasswordEncoder()
+                .username("user")
+                .password("password")
+                .roles("USER")
+                .build();
+        return new InMemoryUserDetailsManager(user);
     }
 
     @Bean
