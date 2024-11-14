@@ -38,10 +38,10 @@ public class SecurityConfig {
                                 )
                                 .defaultSuccessUrl("/success", true)
                 )
-                .formLogin(formLogin ->
-                        formLogin
-                                .defaultSuccessUrl("/success", true)
-                )
+//                .formLogin(formLogin ->
+//                        formLogin
+//                                .defaultSuccessUrl("/success", true)
+//                )
                 .logout(logout ->
                         logout
                                 .logoutSuccessUrl("/") // 임시
