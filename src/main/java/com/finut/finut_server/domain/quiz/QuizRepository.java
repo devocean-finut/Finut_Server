@@ -13,4 +13,11 @@ import java.util.List;
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
 
     List<Quiz> findByDifficulty(DifficultyType quizDiff);
+    @Query(value = "(SELECT * FROM quiz WHERE difficulty = 'HI' ORDER BY RAND() LIMIT 3) " +
+            "UNION ALL " +
+            "(SELECT * FROM quiz WHERE difficulty = 'LO' ORDER BY RAND() LIMIT 3) " +
+            "UNION ALL " +
+            "(SELECT * FROM quiz WHERE difficulty = 'MI' ORDER BY RAND() LIMIT 3)",
+            nativeQuery = true)
+    List<Quiz> findQuizzesByDifficulty();
 }
