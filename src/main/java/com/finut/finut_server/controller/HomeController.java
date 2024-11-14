@@ -72,8 +72,8 @@ public class HomeController {
 
         HttpHeaders headers = new HttpHeaders();
         // accessToken을 Base64로 인코딩
-//        String encodedAccessToken = Base64.getEncoder().encodeToString(accessToken.getBytes());
-        headers.setLocation(URI.create(redirectUri + "?email=" + user.getEmail() + "&accessToken=" + accessToken));
+        String encodedAccessToken = Base64.getEncoder().encodeToString(accessToken.getBytes());
+        headers.setLocation(URI.create(redirectUri + "?email=" + user.getEmail() + "&accessToken=" + encodedAccessToken));
         return new ResponseEntity<>(headers, HttpStatus.FOUND); // 302 Redirect
     }
 //    @Operation(summary = "로그인 성공", description = "로그인 성공시 해당 api에 리다이렉션 되어 수행됩니다")
