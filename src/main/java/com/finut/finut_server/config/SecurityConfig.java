@@ -45,8 +45,8 @@ public class SecurityConfig {
                                 )
                                 .defaultSuccessUrl("/success", true)
                 )
-                .csrf(AbstractHttpConfigurer::disable); // post 요청을 위한 csrf disable
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable) // post 요청을 위한 csrf disable
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 //                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
 
         return http.build();
