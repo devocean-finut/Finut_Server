@@ -79,17 +79,17 @@ public class UsersService {
                 msg = "연속 5회 출석했습니다!";
             }
 
-            // XP가 100이면 승진하기
-            if(user.getXP() >= 100){
-                user.setXP(user.getXP() - 100);
-                Long newLevelId = user.getLevel().getId() + 1L; // id에 1 증가
-
-                // 증가된 id를 가진 Level 엔티티를 데이터베이스에서 조회하여 user에 설정
-                Level newLevel = levelRepository.findById(newLevelId)
-                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레벨입니다."));
-                user.setLevel(newLevel); // user에 새로운 Level 설정
-                msg = "승진했습니다!";
-            }
+//            // XP가 100이면 승진하기
+//            if(user.getXP() >= 100){
+//                user.setXP(user.getXP() - 100);
+//                Long newLevelId = user.getLevel().getId() + 1L; // id에 1 증가
+//
+//                // 증가된 id를 가진 Level 엔티티를 데이터베이스에서 조회하여 user에 설정
+//                Level newLevel = levelRepository.findById(newLevelId)
+//                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 레벨입니다."));
+//                user.setLevel(newLevel); // user에 새로운 Level 설정
+//                msg = "승진했습니다!";
+//            }
 
             usersRepository.save(user);
         }
