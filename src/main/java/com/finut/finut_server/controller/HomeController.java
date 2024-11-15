@@ -68,7 +68,7 @@ public class HomeController {
         UserResponseDTO.loginUserDTO loginUserDTO = new UserResponseDTO.loginUserDTO(user.getEmail(), accessToken);
 
         // 고정된 redirect URI로 리디렉션 설정
-        String redirectUri = "http://localhost:3000/main";
+        String redirectUri = "http://ec2-15-165-175-91.ap-northeast-2.compute.amazonaws.com:3000/main";
 
         HttpHeaders headers = new HttpHeaders();
         // accessToken을 Base64로 인코딩
